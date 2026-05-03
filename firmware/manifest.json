@@ -1,0 +1,51 @@
+﻿{
+    "partitions_offset":  "0x8000",
+    "bootloader":  "bootloader.bin",
+    "bootloader_offset":  "0x1000",
+    "app_offset":  "0x10000",
+    "partitions":  "partitions.bin",
+    "variants":  [
+                     {
+                         "file":  "c15_pwm.bin",
+                         "pack":  "c15",
+                         "id":  "c15_pwm",
+                         "size":  3642256,
+                         "proto":  "pwm"
+                     },
+                     {
+                         "file":  "c15_ibus.bin",
+                         "pack":  "c15",
+                         "id":  "c15_ibus",
+                         "size":  3642736,
+                         "proto":  "ibus"
+                     },
+                     {
+                         "file":  "c15_sbus.bin",
+                         "pack":  "c15",
+                         "id":  "c15_sbus",
+                         "size":  3643136,
+                         "proto":  "sbus"
+                     },
+                     {
+                         "file":  "8v92_pwm.bin",
+                         "pack":  "8v92",
+                         "id":  "8v92_pwm",
+                         "size":  3144624,
+                         "proto":  "pwm"
+                     },
+                     {
+                         "file":  "8v92_ibus.bin",
+                         "pack":  "8v92",
+                         "id":  "8v92_ibus",
+                         "size":  3145088,
+                         "proto":  "ibus"
+                     },
+                     {
+                         "file":  "8v92_sbus.bin",
+                         "pack":  "8v92",
+                         "id":  "8v92_sbus",
+                         "size":  3145488,
+                         "proto":  "sbus"
+                     }
+                 ]
+}
