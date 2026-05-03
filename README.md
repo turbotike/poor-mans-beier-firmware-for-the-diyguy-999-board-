@@ -4,8 +4,7 @@ A free, one-click ESP32 firmware + web flasher that turns
 **TheDIYGuy999's RC_Engine_Sound_ESP32 board (v1.2, unmodified)** into a
 full-feature RC semi-truck controller — engine sounds, lights, ESC, steering,
 horns, gear change, reverse beep, air-brake hiss, and a phone/tablet web UI
-for tuning, all running on a single ESP32. No Teensy, no SD card, no RTC, no
-shaker board.
+for tuning, all running on a single ESP32.
 
 > Inspired by the Beier Sound Module experience, built for everyone who
 > doesn't want to spend $300 on one.
@@ -120,10 +119,6 @@ add it to `build_all_variants.ps1`.
 - **TheDIYGuy999** — the original RC_Engine_Sound_ESP32 board, sound assets,
   and the entire RC engine-sound community foundation this builds on.
 - **Beier Sound Module** — the gold standard this firmware tries to chase.
-- Original Teensy 4.0 firmware concepts ported to ESP32 here.
-
-This project is hobbyist freeware. No warranty. Don't sell it. Do share it,
-fork it, fix it, and post videos.
 
 ---
 
