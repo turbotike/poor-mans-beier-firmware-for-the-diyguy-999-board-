@@ -17,6 +17,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 HERE     = os.path.dirname(os.path.abspath(__file__))
 FW_DIR   = os.path.join(HERE, 'firmware')
+PREV_DIR = os.path.join(HERE, 'previews')
 PORT     = 8765
 
 # --- esptool resolution -----------------------------------------------------
@@ -214,6 +215,8 @@ INDEX_HTML = r"""<!doctype html>
 <header>
   <h1>Poor Man's Beier</h1>
   <span class="sub">pick a sound + protocol, plug in the ESP32, hit Flash</span>
+  <span style="flex:1"></span>
+  <a href="/preview" class="pill ok" style="text-decoration:none">&#9654; Preview Sounds</a>
 </header>
 <main>
 
@@ -366,6 +369,113 @@ refreshPorts();
 </body></html>
 """
 
+# --- Preview page -----------------------------------------------------------
+PREVIEW_HTML = r"""<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<title>Poor Man's Beier - Sound Preview</title>
+<style>
+  :root{--bg:#000000;--card:#0a0a0a;--bord:#1a1a1a;--text:#e0e0e0;--mute:#6a6a6a;
+        --acc:#39ff14;--acc2:#ff3333;--amber:#ffaa00}
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.4 -apple-system,Segoe UI,Roboto,sans-serif;
+       background:var(--bg);color:var(--text);min-height:100vh}
+  header{padding:18px 28px;border-bottom:1px solid #39ff1440;
+         background:linear-gradient(180deg,#0a0a0a 0%,#000000 100%);
+         display:flex;align-items:center;gap:14px}
+  header h1{margin:0;font-size:22px;letter-spacing:3px;font-weight:800;
+            color:var(--acc);text-shadow:0 0 8px #39ff1488,0 0 20px #39ff1433}
+  header .sub{color:var(--mute);font-size:12px}
+  header a{color:var(--text);text-decoration:none;border:1px solid #1a1a1a;
+           padding:6px 12px;border-radius:6px;font-size:12px}
+  header a:hover{border-color:var(--acc);color:var(--acc)}
+  main{max-width:1100px;margin:24px auto;padding:0 24px}
+  .pack{background:linear-gradient(135deg,#0d120a 0%,#0a0a0a 100%);
+        border:1px solid #39ff1440;border-radius:14px;
+        padding:18px 20px;margin-bottom:20px;position:relative;overflow:hidden}
+  .pack::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+                background:linear-gradient(90deg,#39ff14,#1fff00)}
+  .pack h2{margin:0 0 14px 0;color:var(--acc);font-size:15px;letter-spacing:2px;
+           text-transform:uppercase;font-weight:700}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+  .clip{background:#0d0d0d;border:1px solid #1a1a1a;border-radius:10px;padding:10px 12px;
+        display:flex;align-items:center;gap:10px;transition:.15s}
+  .clip:hover{border-color:#39ff1460}
+  .clip.playing{border-color:var(--acc);box-shadow:0 0 12px #39ff1444}
+  .clip .name{flex:1;font-size:13px;font-weight:600;color:var(--text);
+              text-transform:lowercase;letter-spacing:.5px}
+  .clip.playing .name{color:var(--acc)}
+  .play{width:38px;height:38px;border-radius:50%;border:2px solid var(--acc);
+        background:transparent;color:var(--acc);font-size:14px;cursor:pointer;
+        display:flex;align-items:center;justify-content:center;flex-shrink:0;
+        box-shadow:0 0 8px #39ff1444;transition:.15s;padding:0}
+  .play:hover{background:#0d1f08;box-shadow:0 0 14px #39ff1488}
+  .play.on{background:var(--acc);color:#000;box-shadow:0 0 18px #39ff1499}
+  .empty{color:var(--mute);font-size:12px;padding:8px 0}
+  .hint{color:var(--mute);font-size:12px;margin-bottom:14px}
+</style>
+</head><body>
+<header>
+  <h1>Sound Preview</h1>
+  <span class="sub">tap any clip to hear what's actually flashed</span>
+  <span style="flex:1"></span>
+  <a href="/">&larr; Flasher</a>
+</header>
+<main>
+  <p class="hint">Previews are regenerated from the <code>.h</code> files in
+    <code>tools/sound_packs/</code> by running
+    <code>python tools/headers_to_wavs.py</code>.</p>
+  <div id="packs"></div>
+</main>
+<script>
+var current = null; // {audio, btn, clip}
+function stopCurrent(){
+  if(!current) return;
+  try{ current.audio.pause(); }catch(e){}
+  current.btn.classList.remove('on'); current.btn.textContent='\u25B6';
+  current.clip.classList.remove('playing');
+  current = null;
+}
+function play(pack, name, btn, clip){
+  if(current && current.btn===btn){ stopCurrent(); return; }
+  stopCurrent();
+  var a = new Audio('/wav/'+pack+'/'+name);
+  a.addEventListener('ended', stopCurrent);
+  a.addEventListener('error', stopCurrent);
+  current = {audio:a, btn:btn, clip:clip};
+  btn.classList.add('on'); btn.textContent='\u25A0';
+  clip.classList.add('playing');
+  a.play().catch(function(){ stopCurrent(); });
+}
+fetch('/api/previews').then(function(r){return r.json();}).then(function(data){
+  var root = document.getElementById('packs');
+  var packs = Object.keys(data).sort();
+  if(!packs.length){
+    root.innerHTML='<div class="pack"><h2>No previews yet</h2>'
+      +'<div class="empty">Run <code>python tools/headers_to_wavs.py</code> to generate them.</div></div>';
+    return;
+  }
+  packs.forEach(function(pk){
+    var clips = data[pk];
+    var card = document.createElement('div');
+    card.className='pack';
+    card.innerHTML = '<h2>'+pk+' &mdash; '+clips.length+' clips</h2><div class="grid"></div>';
+    var grid = card.querySelector('.grid');
+    clips.forEach(function(name){
+      var clip = document.createElement('div'); clip.className='clip';
+      var btn  = document.createElement('button'); btn.className='play'; btn.textContent='\u25B6';
+      var nm   = document.createElement('div'); nm.className='name'; nm.textContent=name;
+      btn.onclick = (function(p,n,b,c){ return function(){ play(p,n,b,c); }; })(pk,name,btn,clip);
+      clip.appendChild(btn); clip.appendChild(nm);
+      grid.appendChild(clip);
+    });
+    root.appendChild(card);
+  });
+});
+</script>
+</body></html>
+"""
+
 # --- HTTP -------------------------------------------------------------------
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, *_): pass
@@ -382,6 +492,30 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/' or self.path.startswith('/?'):
             self._send(200, 'text/html; charset=utf-8', INDEX_HTML); return
+        if self.path == '/preview' or self.path.startswith('/preview?'):
+            self._send(200, 'text/html; charset=utf-8', PREVIEW_HTML); return
+        if self.path == '/api/previews':
+            data = {}
+            if os.path.isdir(PREV_DIR):
+                for pack in sorted(os.listdir(PREV_DIR)):
+                    pdir = os.path.join(PREV_DIR, pack)
+                    if not os.path.isdir(pdir): continue
+                    data[pack] = sorted([
+                        os.path.splitext(f)[0]
+                        for f in os.listdir(pdir) if f.endswith('.wav')
+                    ])
+            self._send(200, 'application/json', json.dumps(data)); return
+        if self.path.startswith('/wav/'):
+            # /wav/<pack>/<name>
+            m = re.match(r'^/wav/([A-Za-z0-9_]+)/([A-Za-z0-9_]+)$', self.path)
+            if not m:
+                self._send(404, 'text/plain', 'bad wav path'); return
+            pack, name = m.group(1), m.group(2)
+            f = os.path.join(PREV_DIR, pack, name + '.wav')
+            if not os.path.isfile(f):
+                self._send(404, 'text/plain', 'no such wav'); return
+            with open(f, 'rb') as fh: body = fh.read()
+            self._send(200, 'audio/wav', body); return
         if self.path == '/api/ports':
             self._send(200, 'application/json', json.dumps(list_com_ports())); return
         if self.path == '/api/manifest':
