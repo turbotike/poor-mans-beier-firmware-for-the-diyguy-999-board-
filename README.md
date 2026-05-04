@@ -22,9 +22,9 @@ for tuning, all running on a single ESP32.
 - **Two engines included**: Caterpillar **C15** and Detroit **8V92**.
 - **Three RC protocols**: standard **PWM** (uses up to **6 channels** from the
   board's header strip), **FlySky iBUS**, **FrSky SBUS**.
-  > Heads-up: only ibus has been bench-tested so far. pwm and SBUS variants
-  > are built and should work, but if you hit issues open an issue on GitHub
-  > and I'll help dial them in.
+  > Heads-up: PWM and iBUS have both been tested on real hardware. SBUS
+  > is built and should work, but it hasn't been on a truck yet - if you
+  > run it and hit issues, open an issue on GitHub and I'll help dial it in.
 - **Realistic, time-based engine state machine** — accel and decel layers play
   out on real timers, not just throttle position. Punch the throttle and you
   hear a full `idle → accel1 → accel2 → cruise` climb; let off and the engine
@@ -113,8 +113,8 @@ After first boot:
 - **Receiver**:
   - **PWM**: up to **6 servo wires** from RX to CH1–CH6 headers on the board
     (throttle, steering, gear/3-pos, horn, lights, aux).
-  - **iBUS**: single signal wire to RX1 (GPIO16). FlySky FS-iA6B etc. *(untested)*
-  - **SBUS**: single inverted signal wire to RX1. FrSky / Futaba. *(untested)*
+  - **iBUS**: single signal wire to RX1 (GPIO16). FlySky FS-iA6B etc.
+  - **SBUS**: single inverted signal wire to RX1. FrSky / Futaba. *(untested on real hardware)*
 - **ESC + steering**: two servo outputs from the board.
 - **Lights**: 13 LED channels via the on-board MOSFETs.
 
