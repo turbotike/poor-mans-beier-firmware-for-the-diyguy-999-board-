@@ -22,7 +22,7 @@ for tuning, all running on a single ESP32.
 - **Two engines included**: Caterpillar **C15** and Detroit **8V92**.
 - **Three RC protocols**: standard **PWM** (uses up to **6 channels** from the
   board's header strip), **FlySky iBUS**, **FrSky SBUS**.
-  > Heads-up: only PWM has been bench-tested so far. iBUS and SBUS variants
+  > Heads-up: only ibus has been bench-tested so far. pwm and SBUS variants
   > are built and should work, but if you hit issues open an issue on GitHub
   > and I'll help dial them in.
 - **Realistic, time-based engine state machine** — accel and decel layers play
