@@ -1,5 +1,9 @@
 # Poor Man's Beier — Firmware for the DIYGuy999 ESP32 Sound Board
 
+> ⚠️ **Public beta.** Most things work, but some features are still
+> bench-tested only. Expect rough edges, please open issues when you find
+> them.
+
 ### ⚡ [Flash it now in your browser - no downloads](https://turbotike.github.io/poor-mans-beier-firmware-for-the-diyguy-999-board-/)
 
 A free, one-click ESP32 firmware + web flasher that turns
