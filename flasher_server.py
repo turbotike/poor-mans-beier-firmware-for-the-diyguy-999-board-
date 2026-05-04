@@ -155,44 +155,60 @@ INDEX_HTML = r"""<!doctype html>
 <meta charset="utf-8">
 <title>Poor Man's Beier - Flasher</title>
 <style>
-  :root{--bg:#0d1117;--card:#161b22;--bord:#30363d;--text:#e6edf3;--mute:#7d8590;
-        --acc:#ffb000;--acc2:#f85149;--ok:#3fb950}
+  :root{--bg:#000000;--card:#0a0a0a;--bord:#1a1a1a;--text:#e0e0e0;--mute:#6a6a6a;
+        --acc:#39ff14;--acc2:#ff3333;--ok:#39ff14;--amber:#ffaa00}
+  *{box-sizing:border-box}
   body{margin:0;font:14px/1.4 -apple-system,Segoe UI,Roboto,sans-serif;
-       background:var(--bg);color:var(--text)}
-  header{padding:18px 28px;border-bottom:1px solid var(--bord);
+       background:var(--bg);color:var(--text);min-height:100vh}
+  header{padding:18px 28px;border-bottom:1px solid #39ff1440;
+         background:linear-gradient(180deg,#0a0a0a 0%,#000000 100%);
          display:flex;align-items:center;gap:14px}
-  header h1{margin:0;font-size:20px;letter-spacing:.5px}
+  header h1{margin:0;font-size:22px;letter-spacing:3px;font-weight:800;
+            color:var(--acc);text-shadow:0 0 8px #39ff1488,0 0 20px #39ff1433,0 0 40px #39ff1422}
   header .sub{color:var(--mute);font-size:12px}
   main{max-width:880px;margin:24px auto;padding:0 24px}
-  .card{background:var(--card);border:1px solid var(--bord);border-radius:10px;
-        padding:20px;margin-bottom:18px}
+  .card{background:linear-gradient(135deg,#0d120a 0%,#0a0a0a 100%);
+        border:1px solid #39ff1440;border-radius:14px;
+        padding:20px;margin-bottom:18px;position:relative;overflow:hidden}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+                background:linear-gradient(90deg,#39ff14,#1fff00)}
   .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
   .row > *{flex:0 0 auto}
-  label{display:block;color:var(--mute);font-size:11px;text-transform:uppercase;
-        letter-spacing:.6px;margin-bottom:6px}
-  select,button{font:inherit;background:#0d1117;color:var(--text);
-                border:1px solid var(--bord);border-radius:6px;padding:8px 12px}
+  label{display:block;color:var(--acc);font-size:11px;text-transform:uppercase;
+        font-weight:600;letter-spacing:.8px;margin-bottom:6px}
+  select,button{font:inherit;background:#0d0d0d;color:var(--text);
+                border:1px solid #1a1a1a;border-radius:6px;padding:8px 12px}
   select{min-width:180px}
-  button{cursor:pointer;background:var(--acc);color:#000;border:0;font-weight:600}
-  button:hover:not(:disabled){background:#ffc63a}
-  button:disabled{opacity:.5;cursor:not-allowed}
-  button.ghost{background:transparent;color:var(--text);border:1px solid var(--bord);font-weight:400}
+  select:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
+  button{cursor:pointer;background:var(--acc);color:#000;border:0;font-weight:700;
+         text-transform:uppercase;letter-spacing:1px;
+         box-shadow:0 0 12px #39ff1466}
+  button:hover:not(:disabled){background:#5fff3a;box-shadow:0 0 18px #39ff1499}
+  button:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+  button.ghost{background:transparent;color:var(--text);border:1px solid #1a1a1a;
+               font-weight:400;text-transform:none;letter-spacing:0;box-shadow:none}
+  button.ghost:hover:not(:disabled){border-color:var(--acc);color:var(--acc);box-shadow:none;background:transparent}
   .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:6px}
-  .opt{border:1px solid var(--bord);border-radius:8px;padding:14px;cursor:pointer;
-       text-align:center;background:#0d1117;transition:.15s}
-  .opt:hover{border-color:#5e6772}
-  .opt.on{border-color:var(--acc);background:#241b07;box-shadow:0 0 0 1px var(--acc) inset}
-  .opt h3{margin:0 0 4px 0;font-size:15px}
+  .opt{border:1px solid #1a1a1a;border-radius:10px;padding:14px;cursor:pointer;
+       text-align:center;background:#0d0d0d;transition:.15s}
+  .opt:hover{border-color:#39ff1460}
+  .opt.on{border-color:var(--acc);background:#0d1f08;
+          box-shadow:0 0 0 1px var(--acc) inset,0 0 14px #39ff1444}
+  .opt h3{margin:0 0 4px 0;font-size:15px;color:var(--text)}
+  .opt.on h3{color:var(--acc)}
   .opt p{margin:0;color:var(--mute);font-size:11px}
-  pre{background:#010409;border:1px solid var(--bord);border-radius:6px;
-      padding:14px;color:#c9d1d9;font-size:12px;max-height:380px;overflow:auto;
-      white-space:pre-wrap;margin:0}
-  .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;
-        background:#21262d;color:var(--mute)}
-  .pill.ok{background:#0d2818;color:var(--ok)}
-  .pill.err{background:#330e0e;color:var(--acc2)}
-  .warn{background:#241b07;border:1px solid #735c10;color:#ffd97a;padding:10px 12px;
-        border-radius:6px;font-size:12px;margin-bottom:14px}
+  pre{background:#000;border:1px solid #1a1a1a;border-radius:6px;
+      padding:14px;color:var(--acc);font-family:Consolas,Menlo,monospace;font-size:12px;
+      max-height:380px;overflow:auto;white-space:pre-wrap;margin:0;
+      text-shadow:0 0 4px #39ff1444}
+  .pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:11px;
+        background:#0d0d0d;color:var(--mute);border:1px solid #1a1a1a;
+        text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+  .pill.ok{background:#0d1f08;color:var(--ok);border-color:#39ff1460;
+           box-shadow:0 0 8px #39ff1444}
+  .pill.err{background:#1f0808;color:var(--acc2);border-color:#ff333360}
+  .warn{background:#1f1808;border:1px solid #ffaa0060;color:var(--amber);
+        padding:10px 12px;border-radius:8px;font-size:12px;margin-bottom:14px}
 </style>
 </head><body>
 <header>
