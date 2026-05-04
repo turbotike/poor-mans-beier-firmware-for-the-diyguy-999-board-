@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sound Pack Builder - Poor Man's Beier</title>
+<style>
+  :root{--bg:#000;--card:#0a0a0a;--bord:#1a1a1a;--text:#e0e0e0;--mute:#6a6a6a;
+        --acc:#39ff14;--amber:#ffaa00;--red:#ff3333}
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.5 -apple-system,Segoe UI,Roboto,sans-serif;
+       background:var(--bg);color:var(--text);min-height:100vh}
+  header{padding:22px 28px;border-bottom:1px solid #39ff1440;
+         background:linear-gradient(180deg,#0a0a0a 0%,#000 100%);
+         display:flex;align-items:center;gap:14px}
+  header h1{margin:0;font-size:22px;letter-spacing:3px;font-weight:800;
+            color:var(--acc);text-shadow:0 0 8px #39ff1488,0 0 20px #39ff1433}
+  header a{color:var(--text);text-decoration:none;border:1px solid #1a1a1a;
+           padding:6px 12px;border-radius:6px;font-size:12px;margin-left:auto}
+  header a:hover{border-color:var(--acc);color:var(--acc)}
+  main{max-width:980px;margin:24px auto;padding:0 20px}
+  .card{background:linear-gradient(135deg,#0d120a 0%,#0a0a0a 100%);
+        border:1px solid #39ff1440;border-radius:14px;
+        padding:22px;margin-bottom:18px;position:relative;overflow:hidden}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+                background:linear-gradient(90deg,#39ff14,#1fff00)}
+  h2{margin:0 0 14px;color:var(--acc);font-size:14px;letter-spacing:2px;
+     text-transform:uppercase;font-weight:700}
+  .drop{border:2px dashed #39ff1466;border-radius:12px;padding:36px 20px;text-align:center;
+        background:#050a03;cursor:pointer;transition:.15s}
+  .drop:hover,.drop.over{border-color:var(--acc);background:#0a1505;
+                          box-shadow:0 0 18px #39ff1444 inset}
+  .drop p{margin:6px 0;color:var(--mute)}
+  .drop strong{color:var(--acc);font-size:16px;letter-spacing:1px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+  label{font-size:11px;color:var(--acc);letter-spacing:1px;text-transform:uppercase;
+        font-weight:700;display:block;margin-bottom:4px}
+  input[type=text],select{font:inherit;background:#0d0d0d;color:var(--text);
+                          border:1px solid #1a1a1a;border-radius:6px;padding:8px 12px;min-width:160px}
+  input[type=text]:focus,select:focus{outline:none;border-color:var(--acc)}
+  button{cursor:pointer;background:var(--acc);color:#000;border:0;font-weight:700;
+         padding:10px 20px;border-radius:6px;text-transform:uppercase;letter-spacing:1px;
+         box-shadow:0 0 12px #39ff1466;font-size:13px}
+  button:hover:not(:disabled){background:#5fff3a;box-shadow:0 0 18px #39ff1499}
+  button:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+  button.ghost{background:transparent;color:var(--text);border:1px solid #1a1a1a;
+               box-shadow:none;font-weight:400;text-transform:none;letter-spacing:0}
+  button.ghost:hover:not(:disabled){border-color:var(--acc);color:var(--acc);background:transparent;box-shadow:none}
+  table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid #1a1a1a}
+  th{color:var(--mute);font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:600}
+  td.size{font-variant-numeric:tabular-nums;color:var(--acc);text-align:right}
+  td.dur{color:var(--mute);font-variant-numeric:tabular-nums}
+  td .name-input{width:120px;background:#0d0d0d;border:1px solid #1a1a1a;color:var(--acc);
+                 padding:4px 8px;border-radius:4px;font:inherit;font-size:12px}
+  td .name-input:focus{outline:none;border-color:var(--acc)}
+  td button.del{background:transparent;color:var(--red);border:1px solid #ff333360;
+                box-shadow:none;padding:4px 10px;font-size:11px}
+  td button.del:hover{background:#1f0808;color:#ff6666}
+  .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;
+        background:#0d1f08;color:var(--acc);border:1px solid #39ff1460;font-weight:600;
+        text-transform:uppercase;letter-spacing:.5px}
+  .pill.warn{background:#1f1808;color:var(--amber);border-color:#ffaa0060}
+  .pill.err{background:#1f0808;color:var(--red);border-color:#ff333360}
+  .hint{color:var(--mute);font-size:12px;line-height:1.6}
+  .hint code{background:#0d0d0d;border:1px solid #1a1a1a;color:var(--acc);padding:1px 6px;border-radius:4px}
+  .total{margin-top:14px;padding:10px 14px;background:#0d0d0d;border:1px solid #1a1a1a;
+         border-radius:8px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:13px}
+  .total .ok{color:var(--acc)}
+  .total .warn{color:var(--amber)}
+  .total .err{color:var(--red)}
+  details{margin-top:10px}
+  summary{cursor:pointer;color:var(--mute);font-size:12px}
+  summary:hover{color:var(--acc)}
+</style>
+</head>
+<body>
+<header>
+  <h1>SOUND PACK BUILDER</h1>
+  <a href="index.html">&larr; Web Flasher</a>
+</header>
+
+<main>
+
+<div class="card">
+  <h2>1. Drop WAV files</h2>
+  <div id="drop" class="drop">
+    <p><strong>Drop WAVs here</strong></p>
+    <p>or click to browse - any sample rate, mono or stereo, 16/24/32-bit, all converted automatically</p>
+    <input id="filein" type="file" accept="audio/wav,.wav" multiple style="display:none">
+  </div>
+  <p class="hint" style="margin-top:14px">
+    Files get auto-named from their filename. Rename any clip to one of the standard
+    names so the firmware finds it: <code>idle</code>, <code>start</code>, <code>shutdown</code>,
+    <code>accel1</code>, <code>accel2</code>, <code>cruise</code>, <code>decel1</code>,
+    <code>decel2</code>, <code>lope</code>, <code>airbrake1</code>, <code>airdry</code>,
+    <code>horn</code>, <code>blinker</code>, <code>gearchg</code>, <code>revbeep</code>,
+    <code>pbrakeon</code>, <code>pbrakeoff</code>, <code>freerev</code>, <code>highrev</code>.
+  </p>
+</div>
+
+<div class="card" id="listCard" style="display:none">
+  <h2>2. Review &amp; trim</h2>
+  <table id="list"><thead><tr>
+    <th>Name (variable)</th><th>Source file</th>
+    <th style="text-align:right">Duration</th>
+    <th style="text-align:right">Size on flash</th>
+    <th style="text-align:right">Trim to (sec)</th>
+    <th></th>
+  </tr></thead><tbody></tbody></table>
+  <div class="total" id="total"></div>
+  <details>
+    <summary>Sample rate (advanced)</summary>
+    <div class="row" style="margin-top:8px">
+      <div>
+        <label>Sample rate</label>
+        <select id="srate">
+          <option value="22050" selected>22050 Hz - default</option>
+          <option value="16000">16000 Hz - 27% smaller, slightly muffled</option>
+          <option value="11025">11025 Hz - half size, telephone quality</option>
+          <option value="44100">44100 Hz - double size, full quality</option>
+        </select>
+      </div>
+    </div>
+  </details>
+</div>
+
+<div class="card" id="exportCard" style="display:none">
+  <h2>3. Download pack</h2>
+  <div class="row">
+    <div>
+      <label>Pack name</label>
+      <input id="packname" type="text" value="custom" placeholder="custom">
+    </div>
+    <button id="exportBtn">&#x2B07; Download .zip</button>
+    <button id="resetBtn" class="ghost">Clear all</button>
+  </div>
+  <p class="hint" style="margin-top:14px">
+    Unzip into <code>tools/sound_packs/&lt;packname&gt;/</code> in the firmware repo,
+    then run <code>tools\build_all_variants.ps1</code> with that pack name. The
+    web flasher's manifest will pick it up automatically.
+  </p>
+</div>
+
+</main>
+
+<script>
+// ---------- WAV parsing (handles 8/16/24/32-bit PCM + IEEE float) ----------
+function decodeWav(buf){
+  var dv = new DataView(buf);
+  // Validate RIFF/WAVE
+  if(dv.getUint32(0,false)!==0x52494646) throw new Error('not RIFF');
+  if(dv.getUint32(8,false)!==0x57415645) throw new Error('not WAVE');
+  var off = 12, fmt=null, data=null;
+  while(off < dv.byteLength-8){
+    var id = dv.getUint32(off,false), sz = dv.getUint32(off+4,true);
+    if(id===0x666d7420) fmt = {off:off+8, sz:sz};
+    else if(id===0x64617461) data = {off:off+8, sz:sz};
+    off += 8 + sz + (sz&1);
+  }
+  if(!fmt||!data) throw new Error('bad WAV');
+  var fmtTag = dv.getUint16(fmt.off,true);
+  var ch     = dv.getUint16(fmt.off+2,true);
+  var sr     = dv.getUint32(fmt.off+4,true);
+  var bps    = dv.getUint16(fmt.off+14,true);
+  var n = (data.sz / (bps/8) / ch)|0;
+  var out = new Float32Array(n); // mono float in [-1,1]
+  var dpos = data.off;
+  for(var i=0;i<n;i++){
+    var sum = 0;
+    for(var c=0;c<ch;c++){
+      var s;
+      if(fmtTag===3){ // float
+        s = bps===32 ? dv.getFloat32(dpos,true) : dv.getFloat64(dpos,true);
+      } else { // PCM int
+        if(bps===8){ s = (dv.getUint8(dpos)-128)/128; }
+        else if(bps===16){ s = dv.getInt16(dpos,true)/32768; }
+        else if(bps===24){
+          var b0=dv.getUint8(dpos), b1=dv.getUint8(dpos+1), b2=dv.getInt8(dpos+2);
+          s = ((b2<<16)|(b1<<8)|b0)/8388608;
+        }
+        else if(bps===32){ s = dv.getInt32(dpos,true)/2147483648; }
+        else throw new Error('unsupported bits: '+bps);
+      }
+      sum += s;
+      dpos += bps/8;
+    }
+    out[i] = sum/ch;
+  }
+  return {samples:out, rate:sr};
+}
+
+// ---------- Linear resample ----------
+function resample(src, srcRate, dstRate){
+  if(srcRate===dstRate) return src;
+  var ratio = srcRate/dstRate;
+  var n = Math.floor(src.length/ratio);
+  var out = new Float32Array(n);
+  for(var i=0;i<n;i++){
+    var x = i*ratio, i0 = Math.floor(x), i1 = Math.min(i0+1, src.length-1);
+    out[i] = src[i0] + (src[i1]-src[i0])*(x-i0);
+  }
+  return out;
+}
+
+// ---------- Normalize + convert to 8-bit unsigned ----------
+function toU8(samples){
+  var peak = 0;
+  for(var i=0;i<samples.length;i++){ var a = Math.abs(samples[i]); if(a>peak) peak=a; }
+  var g = peak>0.001 ? 0.95/peak : 1; // headroom
+  var out = new Uint8Array(samples.length);
+  for(var i=0;i<samples.length;i++){
+    var v = samples[i]*g;
+    if(v>1) v=1; else if(v<-1) v=-1;
+    out[i] = Math.round((v*0.5+0.5)*255);
+  }
+  return out;
+}
+
+// ---------- Build .h header text ----------
+function emitHeader(name, u8, rate){
+  var n = u8.length;
+  var guard = '_'+name.toUpperCase()+'_H_';
+  var lines = [];
+  lines.push('// Auto-generated by Sound Pack Builder');
+  lines.push('// '+n+' samples @ '+rate+' Hz, 8-bit unsigned PCM mono');
+  lines.push('// Duration: '+(n/rate).toFixed(3)+' sec - Size: '+(n/1024).toFixed(1)+' KB');
+  lines.push('');
+  lines.push('#ifndef '+guard);
+  lines.push('#define '+guard);
+  lines.push('');
+  lines.push('#include <Arduino.h>');
+  lines.push('');
+  lines.push('#define HAVE_'+name.toUpperCase()+' 1');
+  lines.push('');
+  lines.push('const uint32_t '+name+'_len         = '+n+';');
+  lines.push('const uint32_t '+name+'_sample_rate = '+rate+';');
+  lines.push('');
+  lines.push('const uint8_t '+name+'_data[] PROGMEM = {');
+  var per = 16;
+  for(var i=0;i<n;i+=per){
+    var parts = [];
+    for(var j=i;j<Math.min(i+per,n);j++) parts.push('0x'+u8[j].toString(16).toUpperCase().padStart(2,'0'));
+    lines.push('  '+parts.join(', ')+(i+per<n?',':''));
+  }
+  lines.push('};');
+  lines.push('');
+  lines.push('#endif // '+guard);
+  lines.push('');
+  return lines.join('\n');
+}
+
+// ---------- App state ----------
+var clips = []; // {name, srcName, samples (Float32 @ original SR), origRate, trimSec, decoded}
+var FLASH_BUDGET = 3940000; // app partition - bin overhead, conservative
+
+function sanitizeName(s){
+  s = s.toLowerCase().replace(/\.[^.]+$/,'').replace(/[^a-z0-9_]/g,'_').replace(/^_+|_+$/g,'');
+  if(/^[0-9]/.test(s)) s = '_'+s;
+  return s||'clip';
+}
+
+function fmt(n){ return n.toLocaleString(); }
+function row(c, idx){
+  var dur = c.samples.length / c.origRate;
+  var trim = Math.min(c.trimSec, dur);
+  var dstRate = +document.getElementById('srate').value;
+  var size = Math.floor(trim * dstRate);
+  return {dur:dur, trim:trim, size:size};
+}
+
+function render(){
+  var tb = document.querySelector('#list tbody');
+  tb.innerHTML = '';
+  var totalSize = 0, dups = {};
+  clips.forEach(function(c){ dups[c.name] = (dups[c.name]||0)+1; });
+  clips.forEach(function(c, i){
+    var r = row(c, i); totalSize += r.size;
+    var tr = document.createElement('tr');
+    var dupBadge = dups[c.name]>1 ? ' <span class="pill err">DUP</span>' : '';
+    tr.innerHTML =
+      '<td><input class="name-input" data-i="'+i+'" value="'+c.name+'">'+dupBadge+'</td>'
+      +'<td style="color:var(--mute);font-size:12px">'+c.srcName+'</td>'
+      +'<td class="dur" style="text-align:right">'+r.dur.toFixed(2)+'s</td>'
+      +'<td class="size">'+(r.size/1024).toFixed(1)+' KB</td>'
+      +'<td style="text-align:right"><input class="name-input trim-input" data-i="'+i+'" type="number" min="0.1" step="0.1" value="'+c.trimSec.toFixed(2)+'" style="width:70px;text-align:right"></td>'
+      +'<td style="text-align:right"><button class="del" data-i="'+i+'">&times;</button></td>';
+    tb.appendChild(tr);
+  });
+  // wire up name inputs
+  tb.querySelectorAll('.name-input').forEach(function(el){
+    el.addEventListener('input', function(){
+      var i = +el.dataset.i;
+      if(el.classList.contains('trim-input')){
+        var v = parseFloat(el.value)||0.1;
+        clips[i].trimSec = v;
+      } else {
+        clips[i].name = sanitizeName(el.value);
+      }
+      render();
+    });
+  });
+  tb.querySelectorAll('button.del').forEach(function(b){
+    b.onclick = function(){ clips.splice(+b.dataset.i,1); render(); };
+  });
+  // total badge
+  var t = document.getElementById('total');
+  var pct = (totalSize/FLASH_BUDGET*100);
+  var cls = pct<80?'ok':(pct<100?'warn':'err');
+  t.innerHTML = '<span class="pill '+(cls==='ok'?'':cls==='warn'?'warn':'err')+'">'+pct.toFixed(0)+'% of flash budget</span>'
+    +'<span><strong class="'+cls+'">'+(totalSize/1024).toFixed(0)+' KB</strong> of '+(FLASH_BUDGET/1024).toFixed(0)+' KB</span>'
+    +'<span style="color:var(--mute)">'+clips.length+' clips</span>';
+  document.getElementById('listCard').style.display = clips.length?'block':'none';
+  document.getElementById('exportCard').style.display = clips.length?'block':'none';
+  document.getElementById('exportBtn').disabled = pct>100 || clips.length===0;
+}
+
+// ---------- Drop / browse ----------
+var drop = document.getElementById('drop');
+var filein = document.getElementById('filein');
+drop.onclick = function(){ filein.click(); };
+['dragenter','dragover'].forEach(function(e){drop.addEventListener(e,function(ev){ev.preventDefault();drop.classList.add('over');});});
+['dragleave','drop'].forEach(function(e){drop.addEventListener(e,function(ev){ev.preventDefault();drop.classList.remove('over');});});
+drop.addEventListener('drop', function(ev){ handleFiles(ev.dataTransfer.files); });
+filein.addEventListener('change', function(ev){ handleFiles(ev.target.files); });
+
+function handleFiles(fl){
+  Array.from(fl).forEach(function(f){
+    if(!/\.wav$/i.test(f.name)) return;
+    f.arrayBuffer().then(function(buf){
+      try{
+        var d = decodeWav(buf);
+        var nm = sanitizeName(f.name);
+        // If lopeidle.wav -> map to "lope", startup.wav -> "start"
+        var aliasMap = {lopeidle:'lope', startup:'start'};
+        if(aliasMap[nm]) nm = aliasMap[nm];
+        clips.push({
+          name: nm, srcName: f.name,
+          samples: d.samples, origRate: d.rate,
+          trimSec: d.samples.length / d.rate,
+        });
+        render();
+      } catch(e){ alert('Failed to read '+f.name+': '+e.message); }
+    });
+  });
+}
+
+document.getElementById('srate').addEventListener('change', render);
+document.getElementById('resetBtn').addEventListener('click', function(){ clips=[]; render(); });
+
+// ---------- Export as zip (no library - hand-rolled minimal store-only zip) ----------
+function crc32(bytes){
+  if(!crc32.table){
+    var t = new Uint32Array(256);
+    for(var i=0;i<256;i++){
+      var c = i;
+      for(var k=0;k<8;k++) c = (c&1) ? (0xEDB88320 ^ (c>>>1)) : (c>>>1);
+      t[i] = c;
+    }
+    crc32.table = t;
+  }
+  var c = 0xFFFFFFFF, t = crc32.table;
+  for(var i=0;i<bytes.length;i++) c = t[(c^bytes[i])&0xFF] ^ (c>>>8);
+  return (c^0xFFFFFFFF)>>>0;
+}
+function makeZip(files){
+  // files: [{name, bytes}]
+  var enc = new TextEncoder();
+  var local = [], central = [], offset = 0;
+  files.forEach(function(f){
+    var nameB = enc.encode(f.name);
+    var crc = crc32(f.bytes);
+    var sz = f.bytes.length;
+    // local file header
+    var lh = new Uint8Array(30 + nameB.length);
+    var dv = new DataView(lh.buffer);
+    dv.setUint32(0, 0x04034b50, true);
+    dv.setUint16(4, 20, true);   // version
+    dv.setUint16(6, 0, true);    // flags
+    dv.setUint16(8, 0, true);    // compression = stored
+    dv.setUint16(10, 0, true);   // time
+    dv.setUint16(12, 0x21, true);// date (2000-01-01)
+    dv.setUint32(14, crc, true);
+    dv.setUint32(18, sz, true);
+    dv.setUint32(22, sz, true);
+    dv.setUint16(26, nameB.length, true);
+    dv.setUint16(28, 0, true);
+    lh.set(nameB, 30);
+    local.push(lh, f.bytes);
+    // central directory entry
+    var ch = new Uint8Array(46 + nameB.length);
+    var dv2 = new DataView(ch.buffer);
+    dv2.setUint32(0, 0x02014b50, true);
+    dv2.setUint16(4, 20, true);
+    dv2.setUint16(6, 20, true);
+    dv2.setUint16(8, 0, true);
+    dv2.setUint16(10, 0, true);
+    dv2.setUint16(12, 0, true);
+    dv2.setUint16(14, 0x21, true);
+    dv2.setUint32(16, crc, true);
+    dv2.setUint32(20, sz, true);
+    dv2.setUint32(24, sz, true);
+    dv2.setUint16(28, nameB.length, true);
+    dv2.setUint32(42, offset, true);
+    ch.set(nameB, 46);
+    central.push(ch);
+    offset += lh.length + sz;
+  });
+  var centralStart = offset;
+  var centralLen = 0;
+  central.forEach(function(c){ centralLen += c.length; });
+  var end = new Uint8Array(22);
+  var dvE = new DataView(end.buffer);
+  dvE.setUint32(0, 0x06054b50, true);
+  dvE.setUint16(8, files.length, true);
+  dvE.setUint16(10, files.length, true);
+  dvE.setUint32(12, centralLen, true);
+  dvE.setUint32(16, centralStart, true);
+  // concat
+  var total = offset + centralLen + end.length;
+  var out = new Uint8Array(total);
+  var p = 0;
+  local.forEach(function(b){ out.set(b, p); p += b.length; });
+  central.forEach(function(b){ out.set(b, p); p += b.length; });
+  out.set(end, p);
+  return out;
+}
+
+document.getElementById('exportBtn').addEventListener('click', function(){
+  var dstRate = +document.getElementById('srate').value;
+  var packName = sanitizeName(document.getElementById('packname').value || 'custom');
+  var enc = new TextEncoder();
+  var files = [];
+  clips.forEach(function(c){
+    // trim
+    var nSrc = Math.min(c.samples.length, Math.floor(c.trimSec * c.origRate));
+    var trimmed = c.samples.subarray(0, nSrc);
+    // resample
+    var rs = resample(trimmed, c.origRate, dstRate);
+    // tiny linear fade out (last 50ms) to avoid pops at trim
+    var fade = Math.min(rs.length, Math.floor(dstRate*0.05));
+    for(var i=0;i<fade;i++){ rs[rs.length-1-i] *= i/fade; }
+    var u8 = toU8(rs);
+    var hdr = emitHeader(c.name, u8, dstRate);
+    files.push({name: packName+'/'+c.name+'.h', bytes: enc.encode(hdr)});
+  });
+  // README inside zip
+  var readme = '# '+packName+' sound pack\n\n'
+    +'Generated by the Sound Pack Builder.\n\n'
+    +'## Install\n\n'
+    +'1. Unzip into `tools/sound_packs/` of the firmware repo so you have:\n'
+    +'   `tools/sound_packs/'+packName+'/*.h`\n'
+    +'2. From the firmware root, run:\n'
+    +'   `tools\\use_pack.ps1 '+packName+'`\n'
+    +'   then `pio run -e esp32dev` (or `tools\\build_all_variants.ps1`).\n\n'
+    +'## Files\n\n'
+    +clips.map(function(c){
+      var sz = Math.floor(c.trimSec*dstRate);
+      return '- `'+c.name+'.h`  ('+c.trimSec.toFixed(2)+'s, '+(sz/1024).toFixed(1)+' KB)';
+    }).join('\n')+'\n';
+  files.push({name: packName+'/README.md', bytes: enc.encode(readme)});
+
+  var zip = makeZip(files);
+  var blob = new Blob([zip], {type:'application/zip'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = packName+'_sound_pack.zip';
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); }, 100);
+});
+</script>
+</body>
+</html>

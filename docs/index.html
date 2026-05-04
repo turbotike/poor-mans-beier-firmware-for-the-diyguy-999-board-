@@ -16,6 +16,10 @@
   header h1{margin:0;font-size:28px;letter-spacing:5px;font-weight:800;
             color:var(--acc);text-shadow:0 0 10px #39ff1488,0 0 24px #39ff1444,0 0 50px #39ff1422}
   header p{margin:6px 0 0;color:var(--mute);font-size:13px;letter-spacing:1px}
+  header .links{margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  header .links a{color:var(--text);text-decoration:none;border:1px solid #1a1a1a;
+                  padding:6px 14px;border-radius:6px;font-size:12px;letter-spacing:1px}
+  header .links a:hover{border-color:var(--acc);color:var(--acc)}
   main{max-width:780px;margin:24px auto;padding:0 20px}
   .card{background:linear-gradient(135deg,#0d120a 0%,#0a0a0a 100%);
         border:1px solid #39ff1440;border-radius:14px;
@@ -60,6 +64,9 @@
 <body>
 <header>
   <h1>POOR MAN'S BEIER</h1>
+  <div class="links">
+    <a href="builder.html">&#127911; Build a sound pack</a>
+  </div>
 </header>
 
 <main>
