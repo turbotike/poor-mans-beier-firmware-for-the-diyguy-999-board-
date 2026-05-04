@@ -1,5 +1,7 @@
 # Poor Man's Beier — Firmware for the DIYGuy999 ESP32 Sound Board
 
+### ⚡ [Flash it now in your browser - no downloads](https://turbotike.github.io/poor-mans-beier-firmware-for-the-diyguy-999-board-/)
+
 A free, one-click ESP32 firmware + web flasher that turns
 **TheDIYGuy999's RC_Engine_Sound_ESP32 board (v1.2, unmodified)** into a
 full-feature RC semi-truck controller — engine sounds, lights, ESC, steering,
