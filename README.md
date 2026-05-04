@@ -21,10 +21,14 @@ for tuning, all running on a single ESP32.
   > Heads-up: only PWM has been bench-tested so far. iBUS and SBUS variants
   > are built and should work, but if you hit issues open an issue on GitHub
   > and I'll help dial them in.
-- **Realistic engine state machine**:
-  `idle → accel1 → accel2 → cruise → decel1 → decel2 → idle`,
-  re-accel from mid-decel resumes at the correct layer, park-gear free-rev,
-  reverse beep, air-brake hiss with hysteresis + cooldown.
+- **Realistic, time-based engine state machine** — accel and decel layers play
+  out on real timers, not just throttle position. Punch the throttle and you
+  hear a full `idle → accel1 → accel2 → cruise` climb; let off and the engine
+  actually *coasts down* through `decel1 → decel2 → idle` over a couple
+  seconds, just like a real diesel falling off boost. Re-accel mid-decel
+  resumes at the correct layer (high-speed lift = high-speed re-engage,
+  low-speed lift = low-speed re-engage). Plus park-gear free-rev, reverse
+  beep, and air-brake hiss with arm/fire hysteresis + cooldown.
 - **Web UI** over the ESP32's own Wi-Fi AP — connect from any phone/tablet,
   no app needed. Tune volumes, crossfades, throttle thresholds, lights, and
   steering trim live.
