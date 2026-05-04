@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Poor Man's Beier - Web Flasher</title>
+<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+<style>
+  :root{--bg:#000;--card:#0a0a0a;--bord:#1a1a1a;--text:#e0e0e0;--mute:#6a6a6a;
+        --acc:#39ff14;--acc2:#ff3333;--amber:#ffaa00}
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.5 -apple-system,Segoe UI,Roboto,sans-serif;
+       background:var(--bg);color:var(--text);min-height:100vh}
+  header{padding:22px 28px;border-bottom:1px solid #39ff1440;
+         background:linear-gradient(180deg,#0a0a0a 0%,#000 100%);text-align:center}
+  header h1{margin:0;font-size:28px;letter-spacing:5px;font-weight:800;
+            color:var(--acc);text-shadow:0 0 10px #39ff1488,0 0 24px #39ff1444,0 0 50px #39ff1422}
+  header p{margin:6px 0 0;color:var(--mute);font-size:13px;letter-spacing:1px}
+  main{max-width:780px;margin:24px auto;padding:0 20px}
+  .card{background:linear-gradient(135deg,#0d120a 0%,#0a0a0a 100%);
+        border:1px solid #39ff1440;border-radius:14px;
+        padding:22px;margin-bottom:18px;position:relative;overflow:hidden}
+  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+                background:linear-gradient(90deg,#39ff14,#1fff00)}
+  h2{margin:0 0 14px;color:var(--acc);font-size:14px;letter-spacing:2px;
+     text-transform:uppercase;font-weight:700}
+  .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+  .opt{border:1px solid #1a1a1a;border-radius:10px;padding:14px;cursor:pointer;
+       text-align:center;background:#0d0d0d;transition:.15s}
+  .opt:hover{border-color:#39ff1460}
+  .opt.on{border-color:var(--acc);background:#0d1f08;
+          box-shadow:0 0 0 1px var(--acc) inset,0 0 14px #39ff1444}
+  .opt h3{margin:0 0 4px;font-size:14px;color:var(--text)}
+  .opt.on h3{color:var(--acc)}
+  .opt p{margin:0;color:var(--mute);font-size:11px}
+  esp-web-install-button{display:block;margin:14px 0 4px;--esp-tools-button-color:#000;
+                         --esp-tools-button-text-color:#000;--esp-tools-button-border-radius:8px}
+  esp-web-install-button button{background:var(--acc) !important;color:#000 !important;
+                                font-weight:700;text-transform:uppercase;letter-spacing:2px;
+                                padding:14px 28px !important;border-radius:8px !important;
+                                box-shadow:0 0 16px #39ff1488 !important;border:0 !important;
+                                cursor:pointer}
+  .warn{background:#1f1808;border:1px solid #ffaa0060;color:var(--amber);
+        padding:12px 14px;border-radius:8px;font-size:12px}
+  .warn strong{color:var(--amber)}
+  .step{display:flex;gap:14px;margin:10px 0;align-items:flex-start}
+  .step .n{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--acc);
+           color:#000;display:flex;align-items:center;justify-content:center;
+           font-weight:800;font-size:13px;box-shadow:0 0 10px #39ff1466}
+  .step .t{font-size:13px;line-height:1.5}
+  code{background:#0d0d0d;border:1px solid #1a1a1a;padding:1px 6px;border-radius:4px;
+       color:var(--acc);font-size:12px}
+  footer{text-align:center;color:var(--mute);font-size:11px;padding:24px;letter-spacing:.5px}
+  footer a{color:var(--acc);text-decoration:none}
+  #unsupported{display:none}
+  body.unsupported #unsupported{display:block}
+  body.unsupported #flasher{display:none}
+</style>
+</head>
+<body>
+<header>
+  <h1>POOR MAN'S BEIER</h1>
+  <p>flash your DIYGuy-999 ESP32 right from this browser - no downloads</p>
+</header>
+
+<main>
+
+<div id="unsupported" class="card">
+  <h2>Browser not supported</h2>
+  <div class="warn">
+    <strong>WebSerial required.</strong> Use <strong>Chrome</strong> or <strong>Edge</strong>
+    on a desktop computer (Windows / Mac / Linux / ChromeOS). Mobile browsers
+    and Safari/Firefox don't support direct USB flashing yet.
+  </div>
+</div>
+
+<div id="flasher">
+
+<div class="card">
+  <h2>1. Pick engine sound</h2>
+  <div id="packs" class="opts"></div>
+</div>
+
+<div class="card">
+  <h2>2. Pick remote protocol</h2>
+  <div id="protos" class="opts"></div>
+</div>
+
+<div class="card">
+  <h2>3. Plug in &amp; flash</h2>
+  <div class="step"><div class="n">1</div><div class="t">Plug the ESP32 into your computer with a USB cable. (CH340 or CP210x driver may be needed first time.)</div></div>
+  <div class="step"><div class="n">2</div><div class="t">Click <strong>Install</strong> below, then pick the COM/serial port that appears.</div></div>
+  <div class="step"><div class="n">3</div><div class="t">If it stalls, hold the <code>BOOT</code> button while clicking install.</div></div>
+  <div id="installSlot" style="margin-top:14px"></div>
+  <div id="picked" style="margin-top:6px;color:var(--mute);font-size:12px"></div>
+</div>
+
+</div><!-- /#flasher -->
+
+</main>
+
+<footer>
+  Open source &middot;
+  <a href="https://github.com/turbotike/poor-mans-beier-firmware-for-the-diyguy-999-board-">github.com/turbotike/poor-mans-beier</a>
+</footer>
+
+<script>
+// WebSerial support gate
+if(!('serial' in navigator)){ document.body.classList.add('unsupported'); }
+
+var manifests = [];
+var pickedPack = null;
+var pickedProto = null;
+
+function refreshButton(){
+  var slot = document.getElementById('installSlot');
+  var picked = document.getElementById('picked');
+  if(!pickedPack || !pickedProto){
+    slot.innerHTML = '<div class="warn">Pick a sound and a protocol above first.</div>';
+    picked.textContent = '';
+    return;
+  }
+  var id = pickedPack + '_' + pickedProto;
+  var m = manifests.find(function(x){return x.id===id;});
+  if(!m){
+    slot.innerHTML = '<div class="warn">No manifest for ' + id + '.</div>';
+    return;
+  }
+  slot.innerHTML = '<esp-web-install-button manifest="'+m.manifest+'">'
+    + '<button slot="activate">&#9889; INSTALL ' + id.toUpperCase() + '</button>'
+    + '</esp-web-install-button>';
+  picked.textContent = 'Selected: ' + m.pack + ' / ' + m.sub;
+}
+
+function buildOpts(elId, items, onPick){
+  var el = document.getElementById(elId);
+  el.innerHTML = '';
+  items.forEach(function(it){
+    var d = document.createElement('div');
+    d.className = 'opt';
+    d.innerHTML = '<h3>'+it.title+'</h3><p>'+it.sub+'</p>';
+    d.onclick = function(){
+      [].forEach.call(el.children, function(c){c.classList.remove('on');});
+      d.classList.add('on');
+      onPick(it.value);
+    };
+    el.appendChild(d);
+  });
+}
+
+fetch('manifests.json').then(function(r){return r.json();}).then(function(list){
+  manifests = list;
+  buildOpts('packs', [
+    {title:'CAT C15',     sub:'turbo diesel inline-6',    value:'c15'},
+    {title:'Detroit 8V92', sub:'two-stroke screamer',     value:'8v92'},
+  ], function(v){ pickedPack=v; refreshButton(); });
+  buildOpts('protos', [
+    {title:'PWM',  sub:'standard RC PPM input',  value:'pwm'},
+    {title:'iBUS', sub:'FlySky 1-wire bus',      value:'ibus'},
+    {title:'SBUS', sub:'FrSky / Futaba 1-wire',  value:'sbus'},
+  ], function(v){ pickedProto=v; refreshButton(); });
+  refreshButton();
+});
+</script>
+</body>
+</html>

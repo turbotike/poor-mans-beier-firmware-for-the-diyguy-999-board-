@@ -134,9 +134,12 @@ class FlashJob:
                 man['app_offset'],        app,
             ]
             self.append('> ' + ' '.join(cmd))
-            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-                                    stderr=subprocess.STDOUT, text=True,
-                                    bufsize=1)
+            # Suppress child console window when launched from pythonw / VBS
+            popen_kw = dict(stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                            text=True, bufsize=1)
+            if sys.platform == 'win32':
+                popen_kw['creationflags'] = 0x08000000  # CREATE_NO_WINDOW
+            proc = subprocess.Popen(cmd, **popen_kw)
             for line in proc.stdout:
                 self.append(line.rstrip())
             proc.wait()

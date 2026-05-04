@@ -1,0 +1,38 @@
+[
+  {
+    "id": "8v92_ibus",
+    "manifest": "manifest_8v92_ibus.json",
+    "pack": "Detroit 8V92",
+    "sub": "iBUS (FlySky)"
+  },
+  {
+    "id": "8v92_pwm",
+    "manifest": "manifest_8v92_pwm.json",
+    "pack": "Detroit 8V92",
+    "sub": "PWM (standard RC PPM)"
+  },
+  {
+    "id": "8v92_sbus",
+    "manifest": "manifest_8v92_sbus.json",
+    "pack": "Detroit 8V92",
+    "sub": "SBUS (FrSky/Futaba)"
+  },
+  {
+    "id": "c15_ibus",
+    "manifest": "manifest_c15_ibus.json",
+    "pack": "CAT C15",
+    "sub": "iBUS (FlySky)"
+  },
+  {
+    "id": "c15_pwm",
+    "manifest": "manifest_c15_pwm.json",
+    "pack": "CAT C15",
+    "sub": "PWM (standard RC PPM)"
+  },
+  {
+    "id": "c15_sbus",
+    "manifest": "manifest_c15_sbus.json",
+    "pack": "CAT C15",
+    "sub": "SBUS (FrSky/Futaba)"
+  }
+]
