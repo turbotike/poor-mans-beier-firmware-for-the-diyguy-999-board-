@@ -14,7 +14,11 @@ for tuning, all running on a single ESP32.
 ## Highlights
 
 - **Two engines included**: Caterpillar **C15** and Detroit **8V92**.
-- **Three RC protocols**: standard **PWM** (5-wire), **FlySky iBUS**, **FrSky SBUS**.
+- **Three RC protocols**: standard **PWM** (uses up to **6 channels** from the
+  board's header strip), **FlySky iBUS**, **FrSky SBUS**.
+  > Heads-up: only PWM has been bench-tested so far. iBUS and SBUS variants
+  > are built and should work, but if you hit issues open an issue on GitHub
+  > and I'll help dial them in.
 - **Realistic engine state machine**:
   `idle → accel1 → accel2 → cruise → decel1 → decel2 → idle`,
   re-accel from mid-decel resumes at the correct layer, park-gear free-rev,
@@ -49,6 +53,12 @@ README.md                     this file
 ---
 
 ## Quick start (flash an ESP32)
+
+**Easiest — web flasher, no downloads:**
+Open <https://turbotike.github.io/poor-mans-beier-firmware-for-the-diyguy-999-board-/>
+in Chrome or Edge on a desktop, plug in the ESP32, click **Install**. Done.
+
+**Or run the local flasher app:**
 
 1. Download or `git clone` this repo.
 2. Plug the ESP32 sound board into your PC over USB **with the truck battery
@@ -85,9 +95,10 @@ After first boot:
 - **Board**: TheDIYGuy999 *RC_Engine_Sound_ESP32* v1.2 (standard, unmodified).
 - **Power**: 2S–3S LiPo into the board's BEC, or USB while flashing.
 - **Receiver**:
-  - **PWM**: 5 servo wires from RX to CH1–CH5 headers.
-  - **iBUS**: single signal wire to RX1 (GPIO16). FlySky FS-iA6B etc.
-  - **SBUS**: single inverted signal wire to RX1. FrSky / Futaba.
+  - **PWM**: up to **6 servo wires** from RX to CH1–CH6 headers on the board
+    (throttle, steering, gear/3-pos, horn, lights, aux).
+  - **iBUS**: single signal wire to RX1 (GPIO16). FlySky FS-iA6B etc. *(untested)*
+  - **SBUS**: single inverted signal wire to RX1. FrSky / Futaba. *(untested)*
 - **ESC + steering**: two servo outputs from the board.
 - **Lights**: 13 LED channels via the on-board MOSFETs.
 
