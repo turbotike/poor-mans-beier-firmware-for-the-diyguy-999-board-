@@ -25,7 +25,9 @@ INC_RE  = re.compile(r'#include\s+"([^"]+\.h)"')
 
 
 def parse_header(path):
-    """Return (rate, bytes) or (rate, None) if header is empty/alias-only."""
+    """Return (rate, bytes, is_alias).
+       is_alias=True if header has no own data array (it just #include's another).
+    """
     with open(path, "r", encoding="ascii", errors="ignore") as f:
         text = f.read()
     sr_match = SR_RE.search(text)
@@ -36,10 +38,10 @@ def parse_header(path):
     # only take bytes inside the array braces
     m = re.search(r"_data\s*\[\s*\]\s*PROGMEM\s*=\s*\{(.*?)\}\s*;", stripped, re.S)
     if not m:
-        return rate, None
+        return rate, None, True  # alias / empty
     body = m.group(1)
     data = bytes(int(h, 16) for h in HEX_RE.findall(body))
-    return rate, data if data else None
+    return rate, (data if data else None), False
 
 
 def resolve_alias(path, depth=0):
@@ -47,7 +49,7 @@ def resolve_alias(path, depth=0):
     follow that include (one level, max 3 hops)."""
     if depth > 3:
         return None
-    rate, data = parse_header(path)
+    rate, data, _ = parse_header(path)
     if data:
         return rate, data
     # try alias via #include
@@ -98,6 +100,11 @@ def main():
                 continue
             name = os.path.splitext(h)[0]
             if name in SKIP:
+                continue
+            # skip alias headers (they just #include another) - dedupes airbrake1/2/3 etc.
+            _, _, is_alias = parse_header(os.path.join(pack_dir, h))
+            if is_alias:
+                print(f"  ~ {name:<14} (alias, skipped)")
                 continue
             r = resolve_alias(os.path.join(pack_dir, h))
             if not r:
