@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Poor Man's Beier &mdash; Sound Preview</title>
+<style>
+  :root{--bg:#0d1117;--card:#161b22;--ok:#2ea043;--mut:#6e7681;--fg:#f0f6fc;--accent:#58a6ff;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,Segoe UI,sans-serif;}
+  header{background:linear-gradient(180deg,#1a2230,#161b22);padding:18px 16px;border-bottom:1px solid #30363d;text-align:center;}
+  header h1{margin:0;font-size:1.4em;}
+  header p{margin:6px 0 0;color:var(--mut);font-size:0.9em;}
+  .nav{display:flex;justify-content:center;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  .nav a{color:var(--accent);text-decoration:none;padding:5px 10px;border:1px solid #30363d;border-radius:6px;font-size:0.85em;}
+  .nav a.active{background:var(--accent);color:#000;border-color:var(--accent);}
+  main{max-width:780px;margin:0 auto;padding:16px;}
+  .pack{background:var(--card);border:1px solid #30363d;border-radius:10px;padding:14px;margin-bottom:14px;}
+  .pack h2{margin:0 0 10px;font-size:1.05em;color:var(--ok);}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;}
+  .clip{background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:8px;text-align:center;cursor:pointer;transition:all .12s;}
+  .clip:hover{border-color:var(--accent);transform:translateY(-1px);}
+  .clip.playing{border-color:var(--ok);background:#1a2a1a;}
+  .clip .name{font-weight:600;font-size:0.92em;}
+  .clip .meta{color:var(--mut);font-size:0.75em;margin-top:3px;}
+  .icon{font-size:1.1em;margin-right:4px;}
+  footer{text-align:center;color:var(--mut);font-size:0.8em;padding:14px;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>&#x1F50A; Sound Preview</h1>
+  <p>Tap any clip to hear what's actually flashed to the truck.</p>
+  <div class="nav">
+    <a href="index.html">&larr; Flasher</a>
+    <a href="preview.html" class="active">Preview Sounds</a>
+    <a href="builder.html">Build a Pack</a>
+  </div>
+</header>
+
+<main id="root"></main>
+<footer>WAVs auto-regenerated from the live <code>.h</code> sound headers.</footer>
+
+<audio id="player"></audio>
+
+<script>
+const PACKS = {
+  c15:  { title: 'Caterpillar C15',   slots: [] },
+  '8v92': { title: 'Detroit 8V92',    slots: [] }
+};
+
+// Manifest is generated server-side at build time. For static GitHub Pages,
+// we just read the directory listing via a baked-in slot list.
+const SLOTS = [
+  'idle','lope','start','accel1','accel2','cruise','decel1','decel2',
+  'freerev','highrev','shutdown',
+  'horn','airbrake1','airbrake2','airbrake3',
+  'gearchg','pbrakeon','pbrakeoff','revbeep','blinker','airdry'
+];
+
+const player = document.getElementById('player');
+let activeEl = null;
+
+function playClip(el, src){
+  if (activeEl === el){
+    player.pause();
+    el.classList.remove('playing');
+    activeEl = null;
+    return;
+  }
+  if (activeEl) activeEl.classList.remove('playing');
+  player.src = src;
+  player.play().catch(function(){});
+  el.classList.add('playing');
+  activeEl = el;
+}
+
+player.addEventListener('ended', function(){
+  if (activeEl) activeEl.classList.remove('playing');
+  activeEl = null;
+});
+
+async function build(){
+  const root = document.getElementById('root');
+  root.innerHTML = '';
+  for (const pack of Object.keys(PACKS)){
+    const card = document.createElement('div');
+    card.className = 'pack';
+    card.innerHTML = '<h2>'+PACKS[pack].title+'</h2><div class="grid"></div>';
+    const grid = card.querySelector('.grid');
+    let count = 0;
+    for (const slot of SLOTS){
+      const url = 'previews/'+pack+'/'+slot+'.wav';
+      // HEAD request to check existence
+      try {
+        const r = await fetch(url, {method:'HEAD'});
+        if (!r.ok) continue;
+      } catch(e){ continue; }
+      count++;
+      const c = document.createElement('div');
+      c.className = 'clip';
+      c.innerHTML = '<div class="name"><span class="icon">&#x25B6;</span>'+slot+'</div>';
+      c.onclick = function(){ playClip(c, url); };
+      grid.appendChild(c);
+    }
+    if (count === 0){
+      card.querySelector('.grid').innerHTML = '<div style="color:var(--mut)">No previews yet.</div>';
+    }
+    root.appendChild(card);
+  }
+}
+
+build();
+</script>
+
+</body>
+</html>
