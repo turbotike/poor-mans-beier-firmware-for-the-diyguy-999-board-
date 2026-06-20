@@ -109,6 +109,22 @@
     <th></th>
   </tr></thead><tbody></tbody></table>
   <div class="total" id="total"></div>
+  <div class="row" style="margin-top:14px">
+    <div>
+      <label>Loudness</label>
+      <select id="loudness">
+        <option value="1">Off - peaks only (most dynamic, quietest)</option>
+        <option value="2">Normal - gentle boost</option>
+        <option value="4" selected>Loud - cuts through the body (recommended)</option>
+        <option value="8">Max - very loud, flattest</option>
+      </select>
+    </div>
+  </div>
+  <p class="hint" style="margin-top:8px">
+    Raises the <em>average</em> level with a built-in limiter so the clip is genuinely
+    loud without the harsh clipping you get from just turning the volume up. "Loud" is a
+    good default for getting sound through a closed truck body.
+  </p>
   <div style="margin-top:14px">
     <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:13px;color:var(--text);cursor:pointer">
       <input type="checkbox" id="preservelevels" checked style="width:auto;min-width:0;margin:0;accent-color:var(--acc)">
@@ -220,17 +236,36 @@ function peakOf(samples){
   for(var i=0;i<samples.length;i++){ var a = Math.abs(samples[i]); if(a>peak) peak=a; }
   return peak;
 }
-// Convert float samples [-1,1] to 8-bit unsigned PCM. If `gain` is supplied it
-// is applied as-is (used for one shared gain across the whole pack, preserving
-// relative loudness); otherwise each clip is normalized to 0.95 peak on its own.
-function toU8(samples, gain){
-  if(gain === undefined){
-    var peak = peakOf(samples);
-    gain = peak>0.001 ? 0.95/peak : 1; // per-clip normalize, 0.95 headroom
+// Loudness maximizer: a smooth peak limiter. Multiplies the signal up by
+// `makeup` (raising the average/perceived level), then rounds peaks off to
+// `ceiling` instead of letting them clip. This is what makes a clip genuinely
+// loud and still clean, rather than just "peak-normalized but quiet".
+function maximize(samples, sr, makeup, ceiling){
+  var out = new Float32Array(samples.length);
+  var atk = Math.exp(-1/(0.0015*sr));  // ~1.5ms attack
+  var rel = Math.exp(-1/(0.120*sr));   // ~120ms release
+  var gr = 1.0;                        // gain-reduction state (1 = no reduction)
+  for(var i=0;i<samples.length;i++){
+    var x = samples[i]*makeup;
+    var a = Math.abs(x);
+    var target = a > ceiling ? ceiling/a : 1.0;
+    if(target < gr) gr = atk*gr + (1-atk)*target;   // attack: pull gain down
+    else            gr = rel*gr + (1-rel)*target;   // release: ease back up
+    out[i] = x*gr;
   }
+  return out;
+}
+
+// Convert float samples [-1,1] to 8-bit unsigned PCM. `gain` (default 1) is
+// applied first; gain/limiting is normally done upstream. TPDF dither is added
+// to mask 8-bit quantization grit, which is most audible on quiet drones.
+function toU8(samples, gain){
+  if(gain === undefined) gain = 1.0;
   var out = new Uint8Array(samples.length);
+  var lsb = 2.0/255.0;  // one 8-bit step in [-1,1] space
   for(var i=0;i<samples.length;i++){
     var v = samples[i]*gain;
+    v += (Math.random()-Math.random()) * lsb;   // +/-1 LSB triangular dither
     if(v>1) v=1; else if(v<-1) v=-1;
     out[i] = Math.round((v*0.5+0.5)*255);
   }
@@ -493,15 +528,26 @@ document.getElementById('exportBtn').addEventListener('click', function(){
   });
   // If preserving relative loudness, find one shared gain from the loudest clip.
   var preserve = document.getElementById('preservelevels').checked;
+  var loudness = +document.getElementById('loudness').value;  // makeup factor, 1 = off
   var sharedGain;
   if(preserve){
     var peak = 0;
     processed.forEach(function(rs){ var p = peakOf(rs); if(p>peak) peak = p; });
     sharedGain = peak>0.001 ? 0.95/peak : 1;
   }
-  // Pass 2: convert to 8-bit and emit one header per clip.
+  // Pass 2: pre-gain -> loudness maximize -> 8-bit (+dither), one header per clip.
   clips.forEach(function(c, i){
-    var u8 = toU8(processed[i], preserve ? sharedGain : undefined);
+    var buf = processed[i];
+    var p   = peakOf(buf);
+    var g   = preserve ? sharedGain : (p>0.001 ? 0.95/p : 1);  // bring to a known start level
+    var u8;
+    if(loudness > 1.0){
+      var pre = new Float32Array(buf.length);
+      for(var k=0;k<buf.length;k++) pre[k] = buf[k]*g;
+      u8 = toU8(maximize(pre, dstRate, loudness, 0.95));
+    } else {
+      u8 = toU8(buf, g);
+    }
     var hdr = emitHeader(c.name, u8, dstRate);
     files.push({name: packName+'/'+c.name+'.h', bytes: enc.encode(hdr)});
   });
