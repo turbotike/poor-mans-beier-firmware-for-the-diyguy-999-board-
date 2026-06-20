@@ -52,16 +52,19 @@ for tuning, all running on a single ESP32.
 ## What's in this repo
 
 ```
-flasher/
-  flasher_server.py           web UI + flash backend (Python stdlib + esptool)
-  Launch_Flasher.bat          Windows launcher (opens browser automatically)
-  Launch_Flasher_silent.vbs   no-console launcher
-  firmware/
-    manifest.json             variant + offset table
-    bootloader.bin
-    partitions.bin
-    c15_pwm.bin    c15_ibus.bin    c15_sbus.bin
-    8v92_pwm.bin   8v92_ibus.bin   8v92_sbus.bin
+flasher_server.py             local web UI + flash backend (Python stdlib + esptool)
+Launch_Flasher.bat            Windows launcher (opens browser automatically)
+Launch_Flasher_silent.vbs     no-console launcher
+firmware/
+  manifest.json               variant + offset table
+  bootloader.bin
+  partitions.bin
+  c15_pwm.bin    c15_ibus.bin    c15_sbus.bin
+  8v92_pwm.bin   8v92_ibus.bin   8v92_sbus.bin
+previews/                     playable WAV previews of each sound pack
+  c15/   8v92/
+docs/                         GitHub Pages site (web flasher, builder, preview)
+tools/                        helper scripts (preview + manifest generation)
 HOW_TO.md                     full step-by-step guide (start here if new)
 README.md                     this file
 ```
@@ -79,8 +82,8 @@ in Chrome or Edge on a desktop, plug in the ESP32, click **Install**. Done.
 1. Download or `git clone` this repo.
 2. Plug the ESP32 sound board into your PC over USB **with the truck battery
    disconnected** (USB power only while flashing).
-3. Double-click **`flasher/Launch_Flasher.bat`** (Windows).
-   On macOS/Linux, run `python3 flasher/flasher_server.py`.
+3. Double-click **`Launch_Flasher.bat`** (Windows).
+   On macOS/Linux, run `python3 flasher_server.py`.
 4. Your browser opens to <http://localhost:8765>.
 5. Pick **engine** (C15 or 8V92), **protocol** (PWM / iBUS / SBUS), and the
    **COM port** the ESP32 enumerated as.
@@ -127,13 +130,19 @@ Detailed pin map and channel assignments are in [HOW_TO.md](HOW_TO.md).
 You only need this if you want to add a new engine sound, add a new RC
 protocol, or hack the firmware.
 
+> **Note:** This repo is the *distribution* repo — prebuilt `.bin` files, the
+> flasher, and the web tools. The PlatformIO firmware source (the `src/`,
+> `platformio.ini`, the `tools/sound_packs/` audio headers, and the
+> `build_all_variants.ps1` / `use_pack.ps1` build scripts referenced below)
+> lives in the firmware source tree, not here. Grab that if you want to
+> recompile.
+
 1. Install [VS Code](https://code.visualstudio.com/) and the
    [PlatformIO IDE](https://platformio.org/install/ide?install=vscode) extension.
-2. Open the firmware project folder (the parent of `flasher/`).
+2. Open the firmware project folder.
 3. Build a single variant: `pio run -e esp32dev`.
 4. Build all six flasher variants: `./tools/build_all_variants.ps1`.
-   This regenerates every `*.bin` in `flasher/firmware/` and refreshes
-   `manifest.json`.
+   This regenerates every `*.bin` in `firmware/` and refreshes `manifest.json`.
 
 Adding a new engine sound: drop a new sound pack under
 `tools/sound_packs/<name>/` matching the layout of `c15/` or `8v92/`, then

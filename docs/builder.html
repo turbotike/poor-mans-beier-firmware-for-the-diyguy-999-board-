@@ -109,6 +109,17 @@
     <th></th>
   </tr></thead><tbody></tbody></table>
   <div class="total" id="total"></div>
+  <div style="margin-top:14px">
+    <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:13px;color:var(--text);cursor:pointer">
+      <input type="checkbox" id="preservelevels" checked style="width:auto;min-width:0;margin:0;accent-color:var(--acc)">
+      Preserve relative loudness between clips
+    </label>
+    <p class="hint" style="margin-top:6px">
+      <strong>Recommended.</strong> Normalizes the whole pack with one shared gain, so a
+      quiet idle stays quieter than full throttle. Uncheck to blast every clip to full
+      volume on its own (louder, but it flattens the engine's dynamics).
+    </p>
+  </div>
   <details>
     <summary>Sample rate (advanced)</summary>
     <div class="row" style="margin-top:8px">
@@ -192,7 +203,7 @@ function decodeWav(buf){
 
 // ---------- Linear resample ----------
 function resample(src, srcRate, dstRate){
-  if(srcRate===dstRate) return src;
+  if(srcRate===dstRate) return src.slice(); // copy so callers can't mutate the source clip
   var ratio = srcRate/dstRate;
   var n = Math.floor(src.length/ratio);
   var out = new Float32Array(n);
@@ -204,13 +215,22 @@ function resample(src, srcRate, dstRate){
 }
 
 // ---------- Normalize + convert to 8-bit unsigned ----------
-function toU8(samples){
+function peakOf(samples){
   var peak = 0;
   for(var i=0;i<samples.length;i++){ var a = Math.abs(samples[i]); if(a>peak) peak=a; }
-  var g = peak>0.001 ? 0.95/peak : 1; // headroom
+  return peak;
+}
+// Convert float samples [-1,1] to 8-bit unsigned PCM. If `gain` is supplied it
+// is applied as-is (used for one shared gain across the whole pack, preserving
+// relative loudness); otherwise each clip is normalized to 0.95 peak on its own.
+function toU8(samples, gain){
+  if(gain === undefined){
+    var peak = peakOf(samples);
+    gain = peak>0.001 ? 0.95/peak : 1; // per-clip normalize, 0.95 headroom
+  }
   var out = new Uint8Array(samples.length);
   for(var i=0;i<samples.length;i++){
-    var v = samples[i]*g;
+    var v = samples[i]*gain;
     if(v>1) v=1; else if(v<-1) v=-1;
     out[i] = Math.round((v*0.5+0.5)*255);
   }
@@ -269,17 +289,17 @@ function row(c, idx){
   return {dur:dur, trim:trim, size:size};
 }
 
+// Full rebuild of the table. Only call this on structural changes (add/remove
+// clip, sample-rate change) - NOT on every keystroke, or the input the user is
+// typing in gets destroyed and loses focus.
 function render(){
   var tb = document.querySelector('#list tbody');
   tb.innerHTML = '';
-  var totalSize = 0, dups = {};
-  clips.forEach(function(c){ dups[c.name] = (dups[c.name]||0)+1; });
   clips.forEach(function(c, i){
-    var r = row(c, i); totalSize += r.size;
+    var r = row(c, i);
     var tr = document.createElement('tr');
-    var dupBadge = dups[c.name]>1 ? ' <span class="pill err">DUP</span>' : '';
     tr.innerHTML =
-      '<td><input class="name-input" data-i="'+i+'" value="'+c.name+'">'+dupBadge+'</td>'
+      '<td><input class="name-input" data-i="'+i+'" value="'+c.name+'"></td>'
       +'<td style="color:var(--mute);font-size:12px">'+c.srcName+'</td>'
       +'<td class="dur" style="text-align:right">'+r.dur.toFixed(2)+'s</td>'
       +'<td class="size">'+(r.size/1024).toFixed(1)+' KB</td>'
@@ -287,32 +307,62 @@ function render(){
       +'<td style="text-align:right"><button class="del" data-i="'+i+'">&times;</button></td>';
     tb.appendChild(tr);
   });
-  // wire up name inputs
+  // wire up inputs. On 'input' (every keystroke) we only update the data model
+  // and the live totals/badges in place. The full re-render happens on 'change'
+  // (blur / enter), once the user is done editing the field.
   tb.querySelectorAll('.name-input').forEach(function(el){
+    var isTrim = el.classList.contains('trim-input');
     el.addEventListener('input', function(){
       var i = +el.dataset.i;
-      if(el.classList.contains('trim-input')){
-        var v = parseFloat(el.value)||0.1;
-        clips[i].trimSec = v;
-      } else {
-        clips[i].name = sanitizeName(el.value);
-      }
-      render();
+      if(isTrim) clips[i].trimSec = parseFloat(el.value)||0.1;
+      else       clips[i].name    = sanitizeName(el.value);
+      refreshLive();
     });
+    el.addEventListener('change', render); // normalize the displayed value
   });
   tb.querySelectorAll('button.del').forEach(function(b){
     b.onclick = function(){ clips.splice(+b.dataset.i,1); render(); };
   });
-  // total badge
+  document.getElementById('listCard').style.display = clips.length?'block':'none';
+  document.getElementById('exportCard').style.display = clips.length?'block':'none';
+  refreshLive();
+}
+
+// Lightweight update: recompute per-row size, duplicate badges, and the flash
+// budget total without touching the input elements (so focus is preserved).
+function refreshLive(){
+  var tb = document.querySelector('#list tbody');
+  var dups = {};
+  clips.forEach(function(c){ dups[c.name] = (dups[c.name]||0)+1; });
+  var totalSize = 0, hasDup = false;
+  clips.forEach(function(c, i){
+    var r = row(c, i); totalSize += r.size;
+    var tr = tb.children[i]; if(!tr) return;
+    var sizeCell = tr.querySelector('td.size');
+    if(sizeCell) sizeCell.textContent = (r.size/1024).toFixed(1)+' KB';
+    var nameCell = tr.children[0];
+    var badge = nameCell.querySelector('.dupbadge');
+    if(dups[c.name] > 1){
+      hasDup = true;
+      if(!badge){
+        badge = document.createElement('span');
+        badge.className = 'pill err dupbadge';
+        badge.textContent = 'DUP';
+        badge.style.marginLeft = '6px';
+        nameCell.appendChild(badge);
+      }
+    } else if(badge){
+      badge.remove();
+    }
+  });
   var t = document.getElementById('total');
   var pct = (totalSize/FLASH_BUDGET*100);
   var cls = pct<80?'ok':(pct<100?'warn':'err');
-  t.innerHTML = '<span class="pill '+(cls==='ok'?'':cls==='warn'?'warn':'err')+'">'+pct.toFixed(0)+'% of flash budget</span>'
+  t.innerHTML = '<span class="pill '+(cls==='ok'?'':cls)+'">'+pct.toFixed(0)+'% of flash budget</span>'
     +'<span><strong class="'+cls+'">'+(totalSize/1024).toFixed(0)+' KB</strong> of '+(FLASH_BUDGET/1024).toFixed(0)+' KB</span>'
-    +'<span style="color:var(--mute)">'+clips.length+' clips</span>';
-  document.getElementById('listCard').style.display = clips.length?'block':'none';
-  document.getElementById('exportCard').style.display = clips.length?'block':'none';
-  document.getElementById('exportBtn').disabled = pct>100 || clips.length===0;
+    +'<span style="color:var(--mute)">'+clips.length+' clips</span>'
+    +(hasDup?'<span class="pill err">rename duplicate names to export</span>':'');
+  document.getElementById('exportBtn').disabled = pct>100 || clips.length===0 || hasDup;
 }
 
 // ---------- Drop / browse ----------
@@ -379,7 +429,7 @@ function makeZip(files){
     dv.setUint16(6, 0, true);    // flags
     dv.setUint16(8, 0, true);    // compression = stored
     dv.setUint16(10, 0, true);   // time
-    dv.setUint16(12, 0x21, true);// date (2000-01-01)
+    dv.setUint16(12, 0x21, true);// date (DOS 1980-01-01)
     dv.setUint32(14, crc, true);
     dv.setUint32(18, sz, true);
     dv.setUint32(22, sz, true);
@@ -431,16 +481,27 @@ document.getElementById('exportBtn').addEventListener('click', function(){
   var packName = sanitizeName(document.getElementById('packname').value || 'custom');
   var enc = new TextEncoder();
   var files = [];
-  clips.forEach(function(c){
-    // trim
+  // Pass 1: trim, resample, and fade each clip into its own float buffer.
+  var processed = clips.map(function(c){
     var nSrc = Math.min(c.samples.length, Math.floor(c.trimSec * c.origRate));
     var trimmed = c.samples.subarray(0, nSrc);
-    // resample
     var rs = resample(trimmed, c.origRate, dstRate);
     // tiny linear fade out (last 50ms) to avoid pops at trim
     var fade = Math.min(rs.length, Math.floor(dstRate*0.05));
     for(var i=0;i<fade;i++){ rs[rs.length-1-i] *= i/fade; }
-    var u8 = toU8(rs);
+    return rs;
+  });
+  // If preserving relative loudness, find one shared gain from the loudest clip.
+  var preserve = document.getElementById('preservelevels').checked;
+  var sharedGain;
+  if(preserve){
+    var peak = 0;
+    processed.forEach(function(rs){ var p = peakOf(rs); if(p>peak) peak = p; });
+    sharedGain = peak>0.001 ? 0.95/peak : 1;
+  }
+  // Pass 2: convert to 8-bit and emit one header per clip.
+  clips.forEach(function(c, i){
+    var u8 = toU8(processed[i], preserve ? sharedGain : undefined);
     var hdr = emitHeader(c.name, u8, dstRate);
     files.push({name: packName+'/'+c.name+'.h', bytes: enc.encode(hdr)});
   });

@@ -2,7 +2,7 @@
 Regenerate playable .wav previews from the PROGMEM .h sound pack files.
 
 Reads every .h in tools/sound_packs/<pack>/ and writes matching .wav files
-to flasher/previews/<pack>/  (8-bit unsigned PCM mono @ <sample_rate> Hz).
+to previews/<pack>/  (8-bit unsigned PCM mono @ <sample_rate> Hz).
 
 Resolves alias headers (e.g. airbrake1.h -> #include "airbrake2.h") so that
 preview shows the actual played sound.
@@ -17,7 +17,7 @@ import sys
 
 ROOT      = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PACKS_DIR = os.path.join(ROOT, "tools", "sound_packs")
-OUT_DIR   = os.path.join(ROOT, "flasher", "previews")
+OUT_DIR   = os.path.join(ROOT, "previews")
 
 HEX_RE  = re.compile(r"0x([0-9A-Fa-f]{2})")
 SR_RE   = re.compile(r"sample_rate\s*=\s*(\d+)")

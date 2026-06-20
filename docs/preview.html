@@ -89,23 +89,24 @@ async function build(){
     card.className = 'pack';
     card.innerHTML = '<h2>'+PACKS[pack].title+'</h2><div class="grid"></div>';
     const grid = card.querySelector('.grid');
-    let count = 0;
-    for (const slot of SLOTS){
+    // Check every slot in parallel (HEAD), then render the ones that exist in SLOTS order.
+    const checks = await Promise.all(SLOTS.map(async function(slot){
       const url = 'previews/'+pack+'/'+slot+'.wav';
-      // HEAD request to check existence
       try {
         const r = await fetch(url, {method:'HEAD'});
-        if (!r.ok) continue;
-      } catch(e){ continue; }
-      count++;
+        return r.ok ? {slot:slot, url:url} : null;
+      } catch(e){ return null; }
+    }));
+    const found = checks.filter(Boolean);
+    found.forEach(function(it){
       const c = document.createElement('div');
       c.className = 'clip';
-      c.innerHTML = '<div class="name"><span class="icon">&#x25B6;</span>'+slot+'</div>';
-      c.onclick = function(){ playClip(c, url); };
+      c.innerHTML = '<div class="name"><span class="icon">&#x25B6;</span>'+it.slot+'</div>';
+      c.onclick = function(){ playClip(c, it.url); };
       grid.appendChild(c);
-    }
-    if (count === 0){
-      card.querySelector('.grid').innerHTML = '<div style="color:var(--mut)">No previews yet.</div>';
+    });
+    if (found.length === 0){
+      grid.innerHTML = '<div style="color:var(--mut)">No previews yet.</div>';
     }
     root.appendChild(card);
   }
