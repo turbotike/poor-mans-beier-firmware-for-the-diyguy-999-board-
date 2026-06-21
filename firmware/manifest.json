@@ -9,7 +9,7 @@
                          "file":  "c15_pwm.bin",
                          "pack":  "c15",
                          "id":  "c15_pwm",
-                         "size":  2835264,
+                         "size":  2835248,
                          "proto":  "pwm"
                      },
                      {
@@ -30,21 +30,21 @@
                          "file":  "8v92_pwm.bin",
                          "pack":  "8v92",
                          "id":  "8v92_pwm",
-                         "size":  3872576,
+                         "size":  3872560,
                          "proto":  "pwm"
                      },
                      {
                          "file":  "8v92_ibus.bin",
                          "pack":  "8v92",
                          "id":  "8v92_ibus",
-                         "size":  3873072,
+                         "size":  3873056,
                          "proto":  "ibus"
                      },
                      {
                          "file":  "8v92_sbus.bin",
                          "pack":  "8v92",
                          "id":  "8v92_sbus",
-                         "size":  3873440,
+                         "size":  3873424,
                          "proto":  "sbus"
                      }
                  ]
