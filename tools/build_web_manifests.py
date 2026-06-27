@@ -18,6 +18,9 @@ LABELS = {
     "8v92_pwm":  ("Detroit 8V92", "PWM (standard RC PPM)"),
     "8v92_ibus": ("Detroit 8V92", "iBUS (FlySky)"),
     "8v92_sbus": ("Detroit 8V92", "SBUS (FrSky/Futaba)"),
+    "n14_pwm":   ("Cummins N14", "PWM (standard RC PPM)"),
+    "n14_ibus":  ("Cummins N14", "iBUS (FlySky)"),
+    "n14_sbus":  ("Cummins N14", "SBUS (FrSky/Futaba)"),
 }
 
 variants = sorted([

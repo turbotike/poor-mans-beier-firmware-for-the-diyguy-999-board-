@@ -34,5 +34,23 @@
     "manifest": "manifest_c15_sbus.json",
     "pack": "CAT C15",
     "sub": "SBUS (FrSky/Futaba)"
+  },
+  {
+    "id": "n14_ibus",
+    "manifest": "manifest_n14_ibus.json",
+    "pack": "Cummins N14",
+    "sub": "iBUS (FlySky)"
+  },
+  {
+    "id": "n14_pwm",
+    "manifest": "manifest_n14_pwm.json",
+    "pack": "Cummins N14",
+    "sub": "PWM (standard RC PPM)"
+  },
+  {
+    "id": "n14_sbus",
+    "manifest": "manifest_n14_sbus.json",
+    "pack": "Cummins N14",
+    "sub": "SBUS (FrSky/Futaba)"
   }
 ]

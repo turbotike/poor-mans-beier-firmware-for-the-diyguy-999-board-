@@ -46,6 +46,27 @@
                          "id":  "8v92_sbus",
                          "size":  3942208,
                          "proto":  "sbus"
+                     },
+                     {
+                         "file":  "n14_pwm.bin",
+                         "pack":  "n14",
+                         "id":  "n14_pwm",
+                         "size":  2874736,
+                         "proto":  "pwm"
+                     },
+                     {
+                         "file":  "n14_ibus.bin",
+                         "pack":  "n14",
+                         "id":  "n14_ibus",
+                         "size":  2875168,
+                         "proto":  "ibus"
+                     },
+                     {
+                         "file":  "n14_sbus.bin",
+                         "pack":  "n14",
+                         "id":  "n14_sbus",
+                         "size":  2875568,
+                         "proto":  "sbus"
                      }
                  ]
 }

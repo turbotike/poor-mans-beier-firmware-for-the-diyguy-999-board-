@@ -271,7 +271,8 @@ async function loadManifest(){
   const packs  = [...new Set(manifest.variants.map(v=>v.pack))];
   const protos = [...new Set(manifest.variants.map(v=>v.proto))];
   const PACK_LBL = {c15:{title:'Caterpillar C15',sub:'six-pack inline turbo'},
-                    '8v92':{title:'Detroit 8V92',sub:'two-stroke V8 screamer'}};
+                    '8v92':{title:'Detroit 8V92',sub:'two-stroke V8 screamer'},
+                    n14:{title:'Cummins N14',sub:'14L big-cam diesel'}};
   const PROTO_LBL= {pwm:{title:'PWM',sub:'classic 5-channel pulse-width'},
                     ibus:{title:'iBUS',sub:'FlySky single-wire serial'},
                     sbus:{title:'SBUS',sub:'Futaba / FrSky inverted serial'}};

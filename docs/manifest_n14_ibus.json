@@ -1,0 +1,24 @@
+{
+  "name": "Poor Man's Beier - Cummins N14 iBUS (FlySky)",
+  "version": "1.0",
+  "new_install_prompt_erase": false,
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "parts": [
+        {
+          "path": "firmware/bootloader.bin",
+          "offset": 4096
+        },
+        {
+          "path": "firmware/partitions.bin",
+          "offset": 32768
+        },
+        {
+          "path": "firmware/n14_ibus.bin",
+          "offset": 65536
+        }
+      ]
+    }
+  ]
+}
