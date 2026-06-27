@@ -9,42 +9,42 @@
                          "file":  "c15_pwm.bin",
                          "pack":  "c15",
                          "id":  "c15_pwm",
-                         "size":  2842256,
+                         "size":  2882032,
                          "proto":  "pwm"
                      },
                      {
                          "file":  "c15_ibus.bin",
                          "pack":  "c15",
                          "id":  "c15_ibus",
-                         "size":  2842768,
+                         "size":  2882464,
                          "proto":  "ibus"
                      },
                      {
                          "file":  "c15_sbus.bin",
                          "pack":  "c15",
                          "id":  "c15_sbus",
-                         "size":  2843120,
+                         "size":  2882864,
                          "proto":  "sbus"
                      },
                      {
                          "file":  "8v92_pwm.bin",
                          "pack":  "8v92",
                          "id":  "8v92_pwm",
-                         "size":  3901584,
+                         "size":  3941360,
                          "proto":  "pwm"
                      },
                      {
                          "file":  "8v92_ibus.bin",
                          "pack":  "8v92",
                          "id":  "8v92_ibus",
-                         "size":  3902096,
+                         "size":  3941824,
                          "proto":  "ibus"
                      },
                      {
                          "file":  "8v92_sbus.bin",
                          "pack":  "8v92",
                          "id":  "8v92_sbus",
-                         "size":  3902448,
+                         "size":  3942208,
                          "proto":  "sbus"
                      }
                  ]
