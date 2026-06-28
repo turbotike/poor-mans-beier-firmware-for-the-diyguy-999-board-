@@ -7,15 +7,15 @@
       "chipFamily": "ESP32",
       "parts": [
         {
-          "path": "firmware/bootloader.bin",
+          "path": "firmware/bootloader.bin?v=70c9a76f",
           "offset": 4096
         },
         {
-          "path": "firmware/partitions.bin",
+          "path": "firmware/partitions.bin?v=d6a2ee06",
           "offset": 32768
         },
         {
-          "path": "firmware/c15_ibus.bin",
+          "path": "firmware/c15_ibus.bin?v=c7d7d159",
           "offset": 65536
         }
       ]

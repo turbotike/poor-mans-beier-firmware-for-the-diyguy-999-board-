@@ -133,7 +133,7 @@ function refreshButton(){
     slot.innerHTML = '<div class="warn">No manifest for ' + id + '.</div>';
     return;
   }
-  slot.innerHTML = '<esp-web-install-button manifest="'+m.manifest+'">'
+  slot.innerHTML = '<esp-web-install-button manifest="'+m.manifest+'?v='+Date.now()+'">'
     + '<button slot="activate">&#9889; INSTALL ' + id.toUpperCase() + '</button>'
     + '</esp-web-install-button>';
   picked.textContent = 'Selected: ' + m.pack + ' / ' + m.sub;
@@ -155,7 +155,7 @@ function buildOpts(elId, items, onPick){
   });
 }
 
-fetch('manifests.json').then(function(r){return r.json();}).then(function(list){
+fetch('manifests.json?v='+Date.now()).then(function(r){return r.json();}).then(function(list){
   manifests = list;
   buildOpts('packs', [
     {title:'CAT C15',     sub:'turbo diesel inline-6',    value:'c15'},

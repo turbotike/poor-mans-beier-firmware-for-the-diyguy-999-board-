@@ -4,12 +4,18 @@ Reads docs/firmware/ and writes docs/manifest_<variant>.json files plus
 a single docs/manifests.json index that the index.html uses to populate the
 variant picker.
 """
-import json, os
+import json, os, hashlib
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 FW   = os.path.join(ROOT, "docs", "firmware")
 OUT  = os.path.join(ROOT, "docs")
+
+def vstamp(fname):
+    """Short content hash, appended as ?v= to bust browser/CDN cache when a
+    firmware file changes (fixes 'flash says complete but nothing changed')."""
+    with open(os.path.join(FW, fname), "rb") as f:
+        return hashlib.md5(f.read()).hexdigest()[:8]
 
 LABELS = {
     "c15_pwm":  ("CAT C15",  "PWM (standard RC PPM)"),
@@ -40,9 +46,9 @@ for v in variants:
         "builds": [{
             "chipFamily": "ESP32",
             "parts": [
-                {"path": "firmware/bootloader.bin", "offset": 0x1000},
-                {"path": "firmware/partitions.bin", "offset": 0x8000},
-                {"path": f"firmware/{v}.bin",       "offset": 0x10000},
+                {"path": f"firmware/bootloader.bin?v={vstamp('bootloader.bin')}", "offset": 0x1000},
+                {"path": f"firmware/partitions.bin?v={vstamp('partitions.bin')}", "offset": 0x8000},
+                {"path": f"firmware/{v}.bin?v={vstamp(v + '.bin')}",              "offset": 0x10000},
             ],
         }],
     }
