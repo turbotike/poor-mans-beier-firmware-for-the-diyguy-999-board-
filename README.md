@@ -4,6 +4,9 @@
 > bench-tested only. Expect rough edges, please open issues when you find
 > them.
 
+> 🤖 **Vibe coded.** This entire project — firmware, flasher, web tools, and
+> sound packs — was built by vibe coding with AI. Built for fun, tuned by ear.
+
 ### ⚡ [Flash it now in your browser - no downloads](https://turbotike.github.io/poor-mans-beier-firmware-for-the-diyguy-999-board-/)
 
 A free, one-click ESP32 firmware + web flasher that turns
@@ -61,10 +64,8 @@ firmware/
   partitions.bin
   c15_pwm.bin    c15_ibus.bin    c15_sbus.bin
   8v92_pwm.bin   8v92_ibus.bin   8v92_sbus.bin
-previews/                     playable WAV previews of each sound pack
-  c15/   8v92/
-docs/                         GitHub Pages site (web flasher, builder, preview)
-tools/                        helper scripts (preview + manifest generation)
+docs/                         GitHub Pages site (web flasher, builder)
+tools/                        helper scripts (manifest generation)
 HOW_TO.md                     full step-by-step guide (start here if new)
 README.md                     this file
 ```
