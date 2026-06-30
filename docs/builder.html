@@ -315,7 +315,6 @@ function sanitizeName(s){
   return s||'clip';
 }
 
-function fmt(n){ return n.toLocaleString(); }
 function row(c, idx){
   var dur = c.samples.length / c.origRate;
   var trim = Math.min(c.trimSec, dur);
