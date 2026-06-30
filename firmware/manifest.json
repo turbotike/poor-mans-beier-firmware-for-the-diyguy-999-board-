@@ -9,7 +9,7 @@
                          "file":  "c15_pwm.bin",
                          "pack":  "c15",
                          "id":  "c15_pwm",
-                         "size":  3167200,
+                         "size":  3166608,
                          "proto":  "pwm"
                      },
                      {
@@ -30,7 +30,7 @@
                          "file":  "8v92_pwm.bin",
                          "pack":  "8v92",
                          "id":  "8v92_pwm",
-                         "size":  3990208,
+                         "size":  3989600,
                          "proto":  "pwm"
                      },
                      {
@@ -51,7 +51,7 @@
                          "file":  "n14_pwm.bin",
                          "pack":  "n14",
                          "id":  "n14_pwm",
-                         "size":  2979168,
+                         "size":  2978560,
                          "proto":  "pwm"
                      },
                      {

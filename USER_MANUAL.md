@@ -65,22 +65,24 @@ just stay connected.
 
 ## 4. Wiring your receiver
 
-Pick the build that matches your radio when you flash. **The steering servo
-always plugs into the board's CH1 servo header** (the board generates the
-steering signal).
+Pick the build that matches your radio when you flash.
 
 ### PWM (separate wire per channel)
-Wire each receiver channel to the matching board header:
+Wire each receiver channel to the matching board header. Each header has two
+slots wired together (pass-through), which is how steering works: the receiver
+feeds the ESP32 *and* the servo at the same time.
 
 | Function | Board channel | Notes |
 |---|---|---|
-| **Steering servo OUT** | **CH1** | Plug the steering servo here |
-| **Steering signal** | **CH2** | From RX steering channel |
+| **Throttle** | **CH1** | |
+| **Steering** | **CH2** | RX steering → one slot; steering **servo → the other CH2 slot** (pass-through). The ESP32 reads it for turn signals; the servo follows your radio directly. |
 | **Gear (3-position)** | **CH3** | Park / Forward / Reverse |
 | **Lights** | **CH4** | Switch/knob to cycle light modes |
 | **Engine on/off** | **CH5** | 2-position switch |
-| **Throttle** | **CH6** | |
-| **Horn** | **VP pad** | Momentary button/switch |
+| **Horn** | **CH6** | Momentary button/switch |
+
+> In PWM, the ESP32 doesn't generate the steering signal, so steering **trim/
+> reverse** is done on your transmitter (the turn-signal hold still works).
 
 ### iBUS (FlySky) / SBUS (FrSky-Futaba)
 A **single signal wire** to the board's **RX1** input carries all channels.
