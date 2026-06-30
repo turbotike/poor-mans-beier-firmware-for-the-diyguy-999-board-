@@ -15,7 +15,7 @@
           "offset": 32768
         },
         {
-          "path": "firmware/c15_pwm.bin?v=51ef1996",
+          "path": "firmware/c15_pwm.bin?v=b06a75fc",
           "offset": 65536
         }
       ]
