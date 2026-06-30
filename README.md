@@ -63,7 +63,8 @@ firmware/
   n14_pwm.bin   n14_ibus.bin   n14_sbus.bin
 docs/                         GitHub Pages site (web flasher + sound-pack builder)
 tools/                        helper scripts (web manifest generation)
-HOW_TO.md                     full step-by-step guide (start here if new)
+HOW_TO.md                     flashing + first-time setup, step by step
+USER_MANUAL.md                full operating manual (driving, wiring, web UI, trailer)
 README.md                     this file
 ```
 
@@ -94,7 +95,8 @@ click **Install**.
 8. Power-cycle the board. The ESP32 boots, brings up Wi-Fi AP **`RC_SemiTruck`**
    (password **`truckin123`**), and starts driving.
 
-For wiring, RC binding, and tuning, see **[HOW_TO.md](HOW_TO.md)**.
+For wiring, RC binding, and tuning, see **[HOW_TO.md](HOW_TO.md)** (setup) and the
+**[USER_MANUAL.md](USER_MANUAL.md)** (driving, controls, web UI, wireless trailer).
 
 ---
 
