@@ -9,63 +9,63 @@
                          "file":  "c15_pwm.bin",
                          "pack":  "c15",
                          "id":  "c15_pwm",
-                         "size":  3166608,
+                         "size":  3122384,
                          "proto":  "pwm"
                      },
                      {
                          "file":  "c15_ibus.bin",
                          "pack":  "c15",
                          "id":  "c15_ibus",
-                         "size":  3167536,
+                         "size":  3123296,
                          "proto":  "ibus"
                      },
                      {
                          "file":  "c15_sbus.bin",
                          "pack":  "c15",
                          "id":  "c15_sbus",
-                         "size":  3167952,
+                         "size":  3123712,
                          "proto":  "sbus"
                      },
                      {
                          "file":  "8v92_pwm.bin",
                          "pack":  "8v92",
                          "id":  "8v92_pwm",
-                         "size":  3989600,
+                         "size":  3921296,
                          "proto":  "pwm"
                      },
                      {
                          "file":  "8v92_ibus.bin",
                          "pack":  "8v92",
                          "id":  "8v92_ibus",
-                         "size":  3990512,
+                         "size":  3922224,
                          "proto":  "ibus"
                      },
                      {
                          "file":  "8v92_sbus.bin",
                          "pack":  "8v92",
                          "id":  "8v92_sbus",
-                         "size":  3990928,
+                         "size":  3922640,
                          "proto":  "sbus"
                      },
                      {
                          "file":  "n14_pwm.bin",
                          "pack":  "n14",
                          "id":  "n14_pwm",
-                         "size":  2978560,
+                         "size":  2934336,
                          "proto":  "pwm"
                      },
                      {
                          "file":  "n14_ibus.bin",
                          "pack":  "n14",
                          "id":  "n14_ibus",
-                         "size":  2979488,
+                         "size":  2935264,
                          "proto":  "ibus"
                      },
                      {
                          "file":  "n14_sbus.bin",
                          "pack":  "n14",
                          "id":  "n14_sbus",
-                         "size":  2979904,
+                         "size":  2935680,
                          "proto":  "sbus"
                      }
                  ]
