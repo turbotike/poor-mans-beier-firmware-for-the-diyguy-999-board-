@@ -36,6 +36,12 @@
     "sub": "SBUS (FrSky/Futaba)"
   },
   {
+    "id": "c15sim_ibus",
+    "manifest": "manifest_c15sim_ibus.json",
+    "pack": "C15 Simulated",
+    "sub": "iBUS (FlySky) - synth engine + 10-spd trans"
+  },
+  {
     "id": "n14_ibus",
     "manifest": "manifest_n14_ibus.json",
     "pack": "Cummins N14",

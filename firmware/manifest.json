@@ -67,6 +67,13 @@
                          "id":  "n14_sbus",
                          "size":  3106960,
                          "proto":  "sbus"
+                     },
+                     {
+                         "file":  "c15sim_ibus.bin",
+                         "pack":  "c15sim",
+                         "id":  "c15sim_ibus",
+                         "size":  3997360,
+                         "proto":  "ibus"
                      }
                  ]
 }

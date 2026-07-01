@@ -160,6 +160,7 @@ fetch('manifests.json?v='+Date.now()).then(function(r){return r.json();}).then(f
     {title:'CAT C15',     sub:'turbo diesel inline-6',    value:'c15'},
     {title:'Detroit 8V92', sub:'two-stroke screamer',     value:'8v92'},
     {title:'Cummins N14',  sub:'14L big-cam diesel',       value:'n14'},
+    {title:'C15 Simulated', sub:'synth engine + 10-spd trans (iBUS)', value:'c15sim'},
   ], function(v){ pickedPack=v; refreshButton(); });
   buildOpts('protos', [
     {title:'PWM',  sub:'standard RC PPM input',  value:'pwm'},

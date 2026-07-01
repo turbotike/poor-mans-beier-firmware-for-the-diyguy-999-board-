@@ -1,5 +1,5 @@
 {
-  "name": "Poor Man's Beier - Detroit 8V92 PWM (standard RC PPM)",
+  "name": "Poor Man's Beier - C15 Simulated iBUS (FlySky) - synth engine + 10-spd trans",
   "version": "1.0",
   "new_install_prompt_erase": false,
   "builds": [
@@ -15,7 +15,7 @@
           "offset": 32768
         },
         {
-          "path": "firmware/8v92_pwm.bin?v=40162c11",
+          "path": "firmware/c15sim_ibus.bin?v=7ca28473",
           "offset": 65536
         }
       ]
