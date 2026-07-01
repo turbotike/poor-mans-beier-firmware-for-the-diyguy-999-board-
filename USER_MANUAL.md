@@ -124,6 +124,13 @@ Turn signals work by **holding the steering at full lock**:
   and flashes**.
 - **Recenter** the wheel to cancel.
 
+**Steering-tap gestures** (no extra channels needed):
+- **Tap full-right 3× quickly → 4-way hazards** on/off.
+- **Tap full-left 3× quickly → cycle the light modes.**
+
+(Taps are quick jabs to full lock and back — a normal held turn won't trigger
+them. Requires signals enabled.)
+
 Tune it in the web UI → **Steering-Hold Turn Signals**:
 - **Activation Threshold** — how far you must turn before it arms.
 - **Hold Time** — how long to hold the lock before it latches.
