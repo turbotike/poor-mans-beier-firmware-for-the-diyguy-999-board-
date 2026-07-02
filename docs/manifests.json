@@ -39,7 +39,7 @@
     "id": "c15sim_ibus",
     "manifest": "manifest_c15sim_ibus.json",
     "pack": "C15 Simulated",
-    "sub": "iBUS (FlySky) - synth engine + 10-spd trans"
+    "sub": "iBUS (FlySky) - recorded C15 + 10-spd transmission"
   },
   {
     "id": "n14_ibus",

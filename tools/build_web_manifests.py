@@ -27,7 +27,7 @@ LABELS = {
     "n14_pwm":   ("Cummins N14", "PWM (standard RC PPM)"),
     "n14_ibus":  ("Cummins N14", "iBUS (FlySky)"),
     "n14_sbus":  ("Cummins N14", "SBUS (FrSky/Futaba)"),
-    "c15sim_ibus": ("C15 Simulated", "iBUS (FlySky) - synth engine + 10-spd trans"),
+    "c15sim_ibus": ("C15 Simulated", "iBUS (FlySky) - recorded C15 + 10-spd transmission"),
 }
 
 variants = sorted([

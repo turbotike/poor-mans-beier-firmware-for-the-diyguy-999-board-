@@ -3,76 +3,125 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Poor Man's Beier - Web Flasher</title>
+<title>RC LARGECARS - Web Flasher</title>
 <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
 <style>
-  :root{--bg:#000;--card:#0a0a0a;--bord:#1a1a1a;--text:#e0e0e0;--mute:#6a6a6a;
-        --acc:#39ff14;--acc2:#ff3333;--amber:#ffaa00}
-  *{box-sizing:border-box}
-  body{margin:0;font:14px/1.5 -apple-system,Segoe UI,Roboto,sans-serif;
-       background:var(--bg);color:var(--text);min-height:100vh}
-  header{padding:22px 28px;border-bottom:1px solid #39ff1440;
-         background:linear-gradient(180deg,#0a0a0a 0%,#000 100%);text-align:center}
-  header h1{margin:0;font-size:28px;letter-spacing:5px;font-weight:800;
-            color:var(--acc);text-shadow:0 0 10px #39ff1488,0 0 24px #39ff1444,0 0 50px #39ff1422}
-  header p{margin:6px 0 0;color:var(--mute);font-size:13px;letter-spacing:1px}
-  header .links{margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-  header .links a{color:var(--text);text-decoration:none;border:1px solid #1a1a1a;
-                  padding:6px 14px;border-radius:6px;font-size:12px;letter-spacing:1px}
-  header .links a:hover{border-color:var(--acc);color:var(--acc)}
-  main{max-width:780px;margin:24px auto;padding:0 20px}
-  .card{background:linear-gradient(135deg,#0d120a 0%,#0a0a0a 100%);
-        border:1px solid #39ff1440;border-radius:14px;
-        padding:22px;margin-bottom:18px;position:relative;overflow:hidden}
-  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
-                background:linear-gradient(90deg,#39ff14,#1fff00)}
-  h2{margin:0 0 14px;color:var(--acc);font-size:14px;letter-spacing:2px;
-     text-transform:uppercase;font-weight:700}
-  .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
-  .opt{border:1px solid #1a1a1a;border-radius:10px;padding:14px;cursor:pointer;
-       text-align:center;background:#0d0d0d;transition:.15s}
-  .opt:hover{border-color:#39ff1460}
-  .opt.on{border-color:var(--acc);background:#0d1f08;
-          box-shadow:0 0 0 1px var(--acc) inset,0 0 14px #39ff1444}
-  .opt h3{margin:0 0 4px;font-size:14px;color:var(--text)}
-  .opt.on h3{color:var(--acc)}
-  .opt p{margin:0;color:var(--mute);font-size:11px}
-  esp-web-install-button{display:block;margin:14px 0 4px;--esp-tools-button-color:#000;
-                         --esp-tools-button-text-color:#000;--esp-tools-button-border-radius:8px}
-  esp-web-install-button button{background:var(--acc) !important;color:#000 !important;
-                                font-weight:700;text-transform:uppercase;letter-spacing:2px;
-                                padding:14px 28px !important;border-radius:8px !important;
-                                box-shadow:0 0 16px #39ff1488 !important;border:0 !important;
-                                cursor:pointer}
-  .warn{background:#1f1808;border:1px solid #ffaa0060;color:var(--amber);
-        padding:12px 14px;border-radius:8px;font-size:12px}
-  .warn strong{color:var(--amber)}
-  .step{display:flex;gap:14px;margin:10px 0;align-items:flex-start}
-  .step .n{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--acc);
-           color:#000;display:flex;align-items:center;justify-content:center;
-           font-weight:800;font-size:13px;box-shadow:0 0 10px #39ff1466}
-  .step .t{font-size:13px;line-height:1.5}
-  code{background:#0d0d0d;border:1px solid #1a1a1a;padding:1px 6px;border-radius:4px;
-       color:var(--acc);font-size:12px}
-  footer{text-align:center;color:var(--mute);font-size:11px;padding:24px;letter-spacing:.5px}
-  footer a{color:var(--acc);text-decoration:none}
-  #unsupported{display:none}
-  body.unsupported #unsupported{display:block}
-  body.unsupported #flasher{display:none}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+ --bg:#07060d;--bg2:#0e0a18;--card:#0c0913;--border:#271a3a;
+ --text:#f4ecff;--dim:#9d88bd;
+ --pink:#ff2bb5;--green:#b6f500;--cyan:#28e1ff;--purple:#a24bff;--yellow:#ffe600;
+ --acc:var(--green);
+}
+html,body{background:var(--bg)}
+body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif;
+ color:var(--text);min-height:100vh;position:relative;overflow-x:hidden}
+/* 90s synthwave backdrop: neon glows + perspective grid */
+body::before{content:'';position:fixed;inset:0;z-index:-2;
+ background:
+  radial-gradient(900px 500px at 15% -5%, #ff2bb52a, transparent 60%),
+  radial-gradient(800px 500px at 95% 0%, #28e1ff22, transparent 60%),
+  radial-gradient(900px 700px at 50% 120%, #a24bff2e, transparent 60%),
+  var(--bg)}
+body::after{content:'';position:fixed;left:0;right:0;bottom:0;height:42vh;z-index:-1;opacity:.18;
+ background-image:linear-gradient(#28e1ff55 1px,transparent 1px),linear-gradient(90deg,#ff2bb555 1px,transparent 1px);
+ background-size:38px 38px;
+ transform:perspective(340px) rotateX(62deg);transform-origin:bottom;pointer-events:none}
+
+/* ---------- Header / logo ---------- */
+.header{background:linear-gradient(180deg,#000 0%,#07060d 100%);
+ border-bottom:2px solid transparent;border-image:linear-gradient(90deg,#ff2bb5,#b6f500,#28e1ff,#a24bff) 1;
+ padding:14px 14px 12px;position:sticky;top:0;z-index:100;
+ backdrop-filter:blur(6px);background-color:rgba(0,0,0,.85)}
+.hbar{display:flex;align-items:center;gap:14px;max-width:620px;margin:0 auto}
+.header img.logo{height:54px;width:auto;flex-shrink:0;display:block}
+.htitle{flex:1;text-align:center;font-family:Impact,'Haettenschweiler','Arial Narrow Bold','Arial Black',sans-serif;
+ font-style:italic;text-transform:uppercase;letter-spacing:1.5px;line-height:.98;transform:skewX(-7deg);
+ background:linear-gradient(95deg,#ff2bb5,#ffe600 48%,#28e1ff);-webkit-background-clip:text;background-clip:text;
+ color:transparent;-webkit-text-stroke:.4px rgba(0,0,0,.45)}
+.htitle .l1{display:block;font-size:.92rem}
+.htitle .l2{display:block;font-size:1.4rem}
+.subbar{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+.pill{font-size:.66rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+ padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:#120c1d;color:var(--dim);
+ text-decoration:none;display:inline-block;transition:.12s}
+a.pill:hover{border-color:var(--green);color:var(--green)}
+.pill.rx{color:var(--cyan);border-color:#28e1ff55}
+.pill .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);
+ margin-right:6px;vertical-align:middle;box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* ---------- Layout / cards ---------- */
+.wrap{max-width:620px;margin:0 auto;padding:0 12px 40px}
+.card{border-radius:16px;margin:14px auto;padding:16px;position:relative;overflow:hidden;
+ background:linear-gradient(160deg,#140d20 0%,#0b0812 100%);border:1px solid var(--border)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+ background:linear-gradient(90deg,var(--acc),transparent 80%)}
+.card-title{font-size:.72rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+ color:var(--acc);margin-bottom:12px;font-style:italic}
+.card-title .n{display:inline-block;min-width:20px;height:20px;line-height:20px;text-align:center;
+ border-radius:50%;background:var(--acc);color:#000;font-style:normal;margin-right:8px;font-size:.7rem}
+
+/* ---------- Option tiles ---------- */
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.opt{border:2px solid var(--border);border-radius:14px;padding:14px 12px;cursor:pointer;text-align:center;
+ background:#0a0712;transition:.12s;user-select:none;-webkit-tap-highlight-color:transparent}
+.opt:hover{border-color:var(--acc)}
+.opt.on{border-color:var(--acc);box-shadow:0 0 18px #0007, inset 0 0 0 1px var(--acc);
+ background:linear-gradient(160deg,#140d20,#0b0812)}
+.opt h3{font-size:.9rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.5px;
+ color:var(--text);margin-bottom:4px}
+.opt.on h3{color:var(--acc)}
+.opt p{font-size:.66rem;color:var(--dim);line-height:1.4}
+
+/* ---------- Flash steps ---------- */
+.step{display:flex;gap:12px;margin:10px 0;align-items:flex-start}
+.step .n{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--cyan);
+ color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.8rem;
+ box-shadow:0 0 12px #28e1ff66}
+.step .t{font-size:.82rem;line-height:1.5;color:var(--text)}
+code{background:#0a0712;border:1px solid var(--border);padding:1px 6px;border-radius:5px;
+ color:var(--green);font-size:.78rem}
+
+/* ---------- Install button ---------- */
+esp-web-install-button{display:block;margin:14px 0 4px;--esp-tools-button-color:#000;
+ --esp-tools-button-text-color:#000;--esp-tools-button-border-radius:12px}
+esp-web-install-button button{background:var(--green) !important;color:#000 !important;
+ font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:2px;
+ padding:15px 30px !important;border-radius:12px !important;
+ box-shadow:0 0 20px #b6f50077 !important;border:0 !important;cursor:pointer;font-size:.9rem}
+
+.warn{background:#1a0f14;border:1px solid #ff2bb555;color:#ffb3e2;
+ padding:12px 14px;border-radius:12px;font-size:.78rem}
+.warn strong{color:var(--pink)}
+#picked{margin-top:8px;color:var(--dim);font-size:.72rem;text-align:center}
+
+footer{text-align:center;color:var(--dim);font-size:.7rem;padding:8px 16px 30px;letter-spacing:.5px}
+footer a{color:var(--green);text-decoration:none}
+
+#unsupported{display:none}
+body.unsupported #unsupported{display:block}
+body.unsupported #flasher{display:none}
 </style>
 </head>
 <body>
-<header>
-  <h1>POOR MAN'S BEIER</h1>
-  <div class="links">
-    <a href="builder.html">&#127911; Build a sound pack</a>
+
+<div class="header">
+  <div class="hbar">
+    <img class="logo" src="logo.png" alt="RC LARGECARS">
+    <div class="htitle"><span class="l1">Poor Man's Beier</span><span class="l2">Web Flasher</span></div>
   </div>
-</header>
+  <div class="subbar">
+    <span class="pill"><span class="dot"></span>ESP32</span>
+    <span class="pill rx">WebSerial</span>
+    <a class="pill" href="builder.html">&#127911; Build a sound pack</a>
+  </div>
+</div>
 
-<main>
+<div class="wrap">
 
-<div id="unsupported" class="card">
-  <h2>Browser not supported</h2>
+<div id="unsupported" class="card" style="--acc:var(--pink)">
+  <div class="card-title">Browser not supported</div>
   <div class="warn">
     <strong>WebSerial required.</strong> Use <strong>Chrome</strong> or <strong>Edge</strong>
     on a desktop computer (Windows / Mac / Linux / ChromeOS). Mobile browsers
@@ -82,28 +131,28 @@
 
 <div id="flasher">
 
-<div class="card">
-  <h2>1. Pick engine sound</h2>
+<div class="card" style="--acc:var(--green)">
+  <div class="card-title"><span class="n">1</span>Pick engine sound</div>
   <div id="packs" class="opts"></div>
 </div>
 
-<div class="card">
-  <h2>2. Pick remote protocol</h2>
+<div class="card" style="--acc:var(--pink)">
+  <div class="card-title"><span class="n">2</span>Pick remote protocol</div>
   <div id="protos" class="opts"></div>
 </div>
 
-<div class="card">
-  <h2>3. Plug in &amp; flash</h2>
+<div class="card" style="--acc:var(--cyan)">
+  <div class="card-title"><span class="n">3</span>Plug in &amp; flash</div>
   <div class="step"><div class="n">1</div><div class="t">Plug the ESP32 into your computer with a USB cable. (CH340 or CP210x driver may be needed first time.)</div></div>
   <div class="step"><div class="n">2</div><div class="t">Click <strong>Install</strong> below, then pick the COM/serial port that appears.</div></div>
   <div class="step"><div class="n">3</div><div class="t">If it stalls, hold the <code>BOOT</code> button while clicking install.</div></div>
   <div id="installSlot" style="margin-top:14px"></div>
-  <div id="picked" style="margin-top:6px;color:var(--mute);font-size:12px"></div>
+  <div id="picked"></div>
 </div>
 
 </div><!-- /#flasher -->
 
-</main>
+</div><!-- /.wrap -->
 
 <footer>
   Open source &middot;
@@ -160,7 +209,7 @@ fetch('manifests.json?v='+Date.now()).then(function(r){return r.json();}).then(f
     {title:'CAT C15',     sub:'turbo diesel inline-6',    value:'c15'},
     {title:'Detroit 8V92', sub:'two-stroke screamer',     value:'8v92'},
     {title:'Cummins N14',  sub:'14L big-cam diesel',       value:'n14'},
-    {title:'C15 Simulated', sub:'synth engine + 10-spd trans (iBUS)', value:'c15sim'},
+    {title:'C15 Simulated', sub:'recorded C15 + 10-spd transmission (iBUS)', value:'c15sim'},
   ], function(v){ pickedPack=v; refreshButton(); });
   buildOpts('protos', [
     {title:'PWM',  sub:'standard RC PPM input',  value:'pwm'},
