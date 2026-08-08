@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "Poor Man's Beier - Detroit 8V92 iBUS (FlySky)",
   "version": "1.0",
   "new_install_prompt_erase": false,
@@ -15,7 +15,7 @@
           "offset": 32768
         },
         {
-          "path": "firmware/8v92_ibus.bin?v=fc0f5edc",
+          "path": "firmware/8v92_ibus.bin?v=e69b0cc1",
           "offset": 65536
         }
       ]

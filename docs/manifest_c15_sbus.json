@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "Poor Man's Beier - CAT C15 SBUS (FrSky/Futaba)",
   "version": "1.0",
   "new_install_prompt_erase": false,
@@ -15,7 +15,7 @@
           "offset": 32768
         },
         {
-          "path": "firmware/c15_sbus.bin?v=faea3712",
+          "path": "firmware/c15_sbus.bin?v=0c75d937",
           "offset": 65536
         }
       ]

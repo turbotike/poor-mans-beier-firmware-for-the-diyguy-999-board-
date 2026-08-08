@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "Poor Man's Beier - Cummins N14 SBUS (FrSky/Futaba)",
   "version": "1.0",
   "new_install_prompt_erase": false,
@@ -15,7 +15,7 @@
           "offset": 32768
         },
         {
-          "path": "firmware/n14_sbus.bin?v=a72bfbc7",
+          "path": "firmware/n14_sbus.bin?v=05d99b72",
           "offset": 65536
         }
       ]
