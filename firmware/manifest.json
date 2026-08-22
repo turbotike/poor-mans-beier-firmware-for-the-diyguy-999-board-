@@ -6,74 +6,67 @@
   "partitions": "partitions.bin",
   "variants": [
     {
-      "file": "c15_pwm.bin",
-      "pack": "c15",
       "id": "c15_pwm",
-      "size": 3294592,
-      "proto": "pwm"
+      "pack": "c15",
+      "proto": "pwm",
+      "file": "c15_pwm.bin",
+      "size": 2827216
     },
     {
-      "file": "c15_ibus.bin",
-      "pack": "c15",
       "id": "c15_ibus",
-      "size": 3295536,
-      "proto": "ibus"
-    },
-    {
-      "file": "c15_sbus.bin",
       "pack": "c15",
+      "proto": "ibus",
+      "file": "c15_ibus.bin",
+      "size": 2828128
+    },
+    {
       "id": "c15_sbus",
-      "size": 3295968,
-      "proto": "sbus"
+      "pack": "c15",
+      "proto": "sbus",
+      "file": "c15_sbus.bin",
+      "size": 2828512
     },
     {
-      "file": "8v92_pwm.bin",
-      "pack": "8v92",
       "id": "8v92_pwm",
-      "size": 4093504,
-      "proto": "pwm"
+      "pack": "8v92",
+      "proto": "pwm",
+      "file": "8v92_pwm.bin",
+      "size": 2291648
     },
     {
-      "file": "8v92_ibus.bin",
-      "pack": "8v92",
       "id": "8v92_ibus",
-      "size": 4094448,
-      "proto": "ibus"
-    },
-    {
-      "file": "8v92_sbus.bin",
       "pack": "8v92",
+      "proto": "ibus",
+      "file": "8v92_ibus.bin",
+      "size": 2292576
+    },
+    {
       "id": "8v92_sbus",
-      "size": 4094880,
-      "proto": "sbus"
+      "pack": "8v92",
+      "proto": "sbus",
+      "file": "8v92_sbus.bin",
+      "size": 2292960
     },
     {
-      "file": "n14_pwm.bin",
-      "pack": "n14",
       "id": "n14_pwm",
-      "size": 3106544,
-      "proto": "pwm"
+      "pack": "n14",
+      "proto": "pwm",
+      "file": "n14_pwm.bin",
+      "size": 2961312
     },
     {
-      "file": "n14_ibus.bin",
-      "pack": "n14",
       "id": "n14_ibus",
-      "size": 3107488,
-      "proto": "ibus"
-    },
-    {
-      "file": "n14_sbus.bin",
       "pack": "n14",
-      "id": "n14_sbus",
-      "size": 3107920,
-      "proto": "sbus"
+      "proto": "ibus",
+      "file": "n14_ibus.bin",
+      "size": 2962320
     },
     {
-      "file": "c15sim_ibus.bin",
-      "pack": "c15sim",
-      "id": "c15sim_ibus",
-      "size": 2183040,
-      "proto": "ibus"
+      "id": "n14_sbus",
+      "pack": "n14",
+      "proto": "sbus",
+      "file": "n14_sbus.bin",
+      "size": 2962672
     }
   ]
 }

@@ -119,14 +119,16 @@ If you see `chip stopped responding` or it hangs at "Connecting…":
 
 | Channel | Function | Notes |
 |--------:|----------|-------|
-| CH1 | Steering | Left/right. Trim + invert in web UI. |
-| CH2 | Throttle | Forward / brake / reverse. Center = idle. |
-| CH3 | Gear / 3-position switch | Park ↔ Drive ↔ Reverse |
-| CH4 | Horn | Push button. Short tap = city horn, long hold = air horn. |
-| CH5 | Engine on/off | Toggle switch. |
-| CH6 | Free-rev (PARK only) | Hold to rev the engine while parked. |
-| CH7 | Reserved | — |
-| CH8 | Lights | Push button toggles light state. |
+| CH1 | Steering | Proportional. Trim + invert in web UI. |
+| CH2 | *(free)* | Not read. |
+| CH3 | **Throttle** | Proportional. Centre = idle, forward = drive, back = brake. |
+| CH4 | *(free)* | Not read. |
+| CH5 | **Engine on/off** | 2-position switch. |
+| CH6 | **Horn** | Momentary button. Tap = city horn, hold = air horn. |
+| CH7 | **Gear** | **3-position switch** — Park / Forward / Reverse. |
+| CH8 | **Lights** | Toggle or button. On/off at the level set in the web UI. |
+
+PWM builds use a different set of pins — see `CHANNELS.md` for the full map.
 
 *With iBUS or SBUS, all channels arrive on a single wire. With PWM, run one
 servo wire per channel.*
