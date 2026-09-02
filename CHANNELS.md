@@ -103,3 +103,29 @@ Power the truck, connect to the WiFi access point, then open the page.
 
 Everything is live — sliders take effect as you drag them, and settings survive
 a reflash because they live in a separate area of flash from the firmware.
+
+---
+
+## Reassigning channels (FH12 builds)
+
+The map above is the default. On **FH12** firmware you can also change which
+channel drives which role, from the truck's web UI or over `/set`:
+
+| Key                | Role     | Default |
+|--------------------|----------|---------|
+| `throttleChannel`  | throttle | 3       |
+| `engineChannel`    | engine   | 5       |
+| `hornChannel`      | horn     | 6       |
+| `gearChannel`      | gear     | 7       |
+| `lightsChannel`    | lights   | 8       |
+| `steeringChannel`  | steering | 1       |
+
+Each takes a channel number 1–14. Anything outside that range is ignored and
+the default is used instead, so a bad value cannot leave the truck without a
+throttle.
+
+**iBUS and SBUS only.** In PWM builds each role is wired to its own GPIO on the
+board, so there is nothing to reassign in software — you move the servo lead.
+
+The other engines still use the fixed map; they pick this up when they are next
+rebuilt.

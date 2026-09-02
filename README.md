@@ -21,8 +21,15 @@ a phone/tablet web UI for tuning, all running on a single ESP32.
 
 ## Highlights
 
-- **Three engines included**: Caterpillar **C15**, Detroit **8V92**, and
-  Cummins **N14** — nine ready-to-flash builds in total.
+- **Four engines included**: Caterpillar **C15**, Detroit **8V92**,
+  Cummins **N14**, and Volvo **FH12** — twelve ready-to-flash builds in total,
+  plus the C15 Simulated variant.
+- **FH12 does two things differently.** Its decel voice is the jake brake,
+  looped for as long as you are off the throttle and pitched by engine rpm, so
+  it steps back up at every downshift instead of sliding down one long glide.
+  And it carries no free-rev recording at all — blipping in neutral raises the
+  pitch of the idle loop and lets it settle back, which also makes the blip
+  proportional to how far you move the stick.
 - **Three RC protocols**: standard **PWM** (up to **6 channels** off the board's
   header strip), **FlySky iBUS**, and **FrSky/Futaba SBUS**.
   > PWM and iBUS are tested on real hardware. SBUS is built and should work but
@@ -61,6 +68,7 @@ firmware/
   c15_pwm.bin   c15_ibus.bin   c15_sbus.bin
   8v92_pwm.bin  8v92_ibus.bin  8v92_sbus.bin
   n14_pwm.bin   n14_ibus.bin   n14_sbus.bin
+  fh12_pwm.bin  fh12_ibus.bin  fh12_sbus.bin
 docs/                         GitHub Pages site (web flasher + sound-pack builder)
 tools/                        helper scripts (web manifest generation)
 HOW_TO.md                     flashing + first-time setup, step by step
@@ -88,7 +96,7 @@ click **Install**.
 3. Double-click **`Launch_Flasher.bat`** (Windows).
    On macOS/Linux: `python3 flasher_server.py`.
 4. Your browser opens to <http://localhost:8765>.
-5. Pick **engine** (C15 / 8V92 / N14), **protocol** (PWM / iBUS / SBUS), and the
+5. Pick **engine** (C15 / 8V92 / N14 / FH12), **protocol** (PWM / iBUS / SBUS), and the
    **COM port** the ESP32 enumerated as.
 6. Click **Flash firmware** and watch the progress bar.
 7. When it says "Hard resetting via RTS pin", you're done.
