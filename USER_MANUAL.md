@@ -99,17 +99,22 @@ A **single signal wire** to the board's **RX1** input carries all channels.
 ## 5. Driving & engine sounds
 
 The engine is a **time-based sound machine**. Punch the throttle and it climbs
-**idle → accel → cruise**; ease off and it coasts back **decel → idle**, like a
-real diesel.
+**idle → accel → cruise**; ease off and the **jake brake** takes over until you
+are back at idle, like a real diesel.
 
 - **Start the engine:** flip the engine switch (CH5) or tap **🔑 ENGINE** in the web UI.
 - **Gear (3-position switch):**
   - **Park** — engine idles; hold throttle to **free-rev** (no movement).
   - **Forward** — drive; throttle pulls through the accel/cruise/decel sounds.
   - **Reverse** — backs up with the **reverse beeper**.
-- **Coast-down smarts:** when you let off at speed, you hear the high-speed
-  decel; as the truck slows past ~half speed it drops to the low-speed decel so
-  it never "roars while stopped."
+- **Lifting off — the jake:** the engine brake holds for as long as you are off
+  the throttle rather than playing once, and it grabs over about a third of a
+  second instead of snapping on. Its chop follows **engine rpm**, so it steps
+  back *up* every time the box drops a gear — the same sawtooth you hear from a
+  real truck jaking down through the gears — and falls away as you slow.
+- **Free-rev in Park:** hold the throttle with the gear switch in Park. On FH12
+  this raises the pitch of the idle rather than playing a separate clip, so how
+  far you push the stick is how far it revs.
 - **Lope idle:** tap **🏎 LOPE IDLE** in the web UI for a lumpy/cammed idle.
 
 All the timing (how long each accel/decel layer lasts, crossfades) is adjustable
@@ -233,6 +238,10 @@ WAV files named for each slot (`idle`, `start`, `accel1`, `accel2`, `cruise`,
 `decel1`, `decel2`, `horn`, `shutdown`, …), pick a **Loudness** level, and click
 **Build pack** to get a `.zip` of headers. Tips:
 - **Idle and cruise must loop seamlessly** (cut on a zero-crossing).
+- **`decel1` is the jake.** It loops while you are off the throttle, so cut it
+  to a **whole number of chop cycles** from the steadiest part of the take.
+  Otherwise the rhythm slips a fraction of a beat at every loop wrap and you
+  hear a stumble about once a second.
 - Keep the whole pack under ~3.5 MB.
 - Dial *timing* in the web UI, not the audio.
 
@@ -258,7 +267,7 @@ WAV files named for each slot (`idle`, `start`, `accel1`, `accel2`, `cruise`,
 ## Specs
 
 - **Board:** DIYGuy999 RC_Engine_Sound_ESP32 v1.2 (unmodified)
-- **Engines:** Caterpillar C15, Detroit 8V92, Cummins N14
+- **Engines:** Caterpillar C15, Detroit 8V92, Cummins N14, Volvo FH12
 - **Protocols:** PWM (6-ch), FlySky iBUS, FrSky/Futaba SBUS
 - **Audio:** 8-bit @ 22050 Hz, internal DAC → onboard amp (4Ω speaker recommended)
 - **Power:** 2S–3S LiPo via the board's BEC

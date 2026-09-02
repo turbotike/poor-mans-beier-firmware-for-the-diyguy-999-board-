@@ -33,12 +33,27 @@ a phone/tablet web UI for tuning, all running on a single ESP32.
   header strip), **FlySky iBUS**, and **FrSky/Futaba SBUS**.
   > PWM and iBUS are tested on real hardware. SBUS is built and should work but
   > hasn't been on a truck yet — open an issue if you run it and hit snags.
-- **Realistic, time-based engine state machine** — accel and decel layers play
-  out on real timers, not just throttle position. Punch the throttle and you
-  climb `idle → accel1 → accel2 → cruise`; let off and it coasts back down
-  through `decel1 → decel2 → idle`. Re-accel mid-decel resumes at the right
-  layer. Plus park free-rev, reverse beep, gear-change clunk, park-brake air
-  release, air-brake hiss, and a random air-dryer purge.
+- **Realistic, time-based engine state machine** — accel layers play out on
+  real timers, not just throttle position. Punch the throttle and you climb
+  `idle → accel1 → accel2 → cruise`. Plus park free-rev, reverse beep,
+  gear-change clunk, park-brake air release, air-brake hiss, and a random
+  air-dryer purge.
+- **The jake brake is the decel voice.** Every pack ships this way, because it
+  is what you actually hear from a truck lifting off. It is not a one-shot: the
+  braap **loops** while you are off the throttle, engages like a clutch rather
+  than a switch, and its chop follows **engine rpm, not road speed** — so it
+  steps back up at every downshift instead of sliding down one long glide. Each
+  pack carries its own native rpm (C15 1950, 8V92 1800, N14 and FH12 to suit),
+  because a Cat inline-six and a two-stroke Detroit chop at completely
+  different rates for the same road speed.
+- **FH12 has no free-rev recording and does not need one** — blipping in
+  neutral raises the pitch of the idle loop and lets it settle back, which is
+  the same sound going faster, and makes the blip proportional to the stick
+  instead of on/off.
+- **Reassign what each channel does** (FH12 builds) — throttle, steering,
+  engine, horn, gear and lights each take a channel number instead of being
+  fixed. iBUS/SBUS only; PWM wires each role to its own pin. See
+  [CHANNELS.md](CHANNELS.md).
 - **Loud and clean** — every sound pack is mastered for a consistent, punchy
   level, and the firmware runs a master soft-saturation stage so you can crank
   it to cut through a closed truck body without harsh clipping.
@@ -48,8 +63,8 @@ a phone/tablet web UI for tuning, all running on a single ESP32.
 - **90s neon web UI** over the ESP32's own Wi-Fi AP — connect from any
   phone/tablet, no app required.
 - **One-click flashing** — flash straight from the browser, or run the included
-  pure-Python local flasher. Six… er, **nine** pre-built variants ship in this
-  repo so non-developers never touch a compiler.
+  pure-Python local flasher. **Twelve** pre-built variants ship in this repo
+  (four engines x three protocols) so non-developers never touch a compiler.
 - **In-browser sound-pack builder** — drag in WAVs, get a ready-to-use pack.
 
 ---
@@ -72,6 +87,7 @@ docs/                         GitHub Pages site (web flasher + sound-pack builde
 tools/                        helper scripts (web manifest generation)
 HOW_TO.md                     flashing + first-time setup, step by step
 USER_MANUAL.md                full operating manual (driving, wiring, web UI, trailer)
+CHANNELS.md                   what each RC channel does, and how to reassign it
 README.md                     this file
 ```
 
@@ -183,7 +199,8 @@ You only need this to add a new engine, add an RC protocol, or hack the firmware
 2. Open the firmware project folder.
 3. Build one variant: `pio run -e esp32dev`.
 4. Build all variants: `./tools/build_all_variants.ps1` — regenerates every
-   `*.bin` in `firmware/` and refreshes `manifest.json`.
+   `*.bin` and refreshes `manifest.json`. Recorded-engine packs are built with
+   `-DDRIVELINE_SIM`; the script handles that for you.
 
 Adding a new engine: drop a sound pack under `tools/sound_packs/<name>/` matching
 the layout of `c15/`, add it to `build_all_variants.ps1` and `use_pack.ps1`, then

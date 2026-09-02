@@ -67,6 +67,27 @@
       "proto": "sbus",
       "file": "n14_sbus.bin",
       "size": 2962672
+    },
+    {
+      "id": "fh12_pwm",
+      "pack": "fh12",
+      "proto": "pwm",
+      "file": "fh12_pwm.bin",
+      "size": 1794800
+    },
+    {
+      "id": "fh12_ibus",
+      "pack": "fh12",
+      "proto": "ibus",
+      "file": "fh12_ibus.bin",
+      "size": 1795792
+    },
+    {
+      "id": "fh12_sbus",
+      "pack": "fh12",
+      "proto": "sbus",
+      "file": "fh12_sbus.bin",
+      "size": 1796208
     }
   ]
 }

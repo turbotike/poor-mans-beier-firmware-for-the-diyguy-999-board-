@@ -55,12 +55,12 @@ Either:
 
 ### 4b. Open the flasher
 
-- **Windows**: double-click `flasher\Launch_Flasher.bat`.
+- **Windows**: double-click `Launch_Flasher.bat` in the repo root.
   A Command window opens, then your default browser opens to
   <http://localhost:8765>.
   *(Use `Launch_Flasher_silent.vbs` if you don't want the console window.)*
 - **macOS / Linux**: in a terminal,
-  `python3 flasher/flasher_server.py`, then open
+  `python3 flasher_server.py`, then open
   <http://localhost:8765>.
 
 ### 4c. Pick your build
@@ -209,7 +209,7 @@ If you want to compile from source instead of flashing the included binaries:
    pio device monitor      # serial @ 115200
    ```
 
-5. To rebuild *all six* flasher variants:
+5. To rebuild *all twelve* flasher variants (four engines x three protocols):
 
    ```powershell
    ./tools/build_all_variants.ps1
