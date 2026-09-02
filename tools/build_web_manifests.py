@@ -27,6 +27,9 @@ LABELS = {
     "n14_pwm":   ("Cummins N14", "PWM (standard RC PPM)"),
     "n14_ibus":  ("Cummins N14", "iBUS (FlySky)"),
     "n14_sbus":  ("Cummins N14", "SBUS (FrSky/Futaba)"),
+    "fh12_pwm":  ("Volvo FH12", "PWM (standard RC PPM)"),
+    "fh12_ibus": ("Volvo FH12", "iBUS (FlySky)"),
+    "fh12_sbus": ("Volvo FH12", "SBUS (FrSky/Futaba)"),
     "c15sim_ibus": ("C15 Simulated", "iBUS (FlySky) - recorded C15 + 10-spd transmission"),
 }
 

@@ -42,6 +42,24 @@
     "sub": "iBUS (FlySky) - recorded C15 + 10-spd transmission"
   },
   {
+    "id": "fh12_ibus",
+    "manifest": "manifest_fh12_ibus.json",
+    "pack": "Volvo FH12",
+    "sub": "iBUS (FlySky)"
+  },
+  {
+    "id": "fh12_pwm",
+    "manifest": "manifest_fh12_pwm.json",
+    "pack": "Volvo FH12",
+    "sub": "PWM (standard RC PPM)"
+  },
+  {
+    "id": "fh12_sbus",
+    "manifest": "manifest_fh12_sbus.json",
+    "pack": "Volvo FH12",
+    "sub": "SBUS (FrSky/Futaba)"
+  },
+  {
     "id": "n14_ibus",
     "manifest": "manifest_n14_ibus.json",
     "pack": "Cummins N14",
@@ -57,24 +75,6 @@
     "id": "n14_sbus",
     "manifest": "manifest_n14_sbus.json",
     "pack": "Cummins N14",
-    "sub": "SBUS (FrSky/Futaba)"
-  },
-  {
-    "id": "fh12_pwm",
-    "manifest": "manifest_fh12_pwm.json",
-    "pack": "Volvo FH12",
-    "sub": "PWM (standard RC PPM)"
-  },
-  {
-    "id": "fh12_ibus",
-    "manifest": "manifest_fh12_ibus.json",
-    "pack": "Volvo FH12",
-    "sub": "iBUS (FlySky)"
-  },
-  {
-    "id": "fh12_sbus",
-    "manifest": "manifest_fh12_sbus.json",
-    "pack": "Volvo FH12",
     "sub": "SBUS (FrSky/Futaba)"
   }
 ]

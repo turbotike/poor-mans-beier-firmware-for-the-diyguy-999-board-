@@ -7,15 +7,15 @@
       "chipFamily": "ESP32",
       "parts": [
         {
-          "path": "firmware/bootloader.bin",
+          "path": "firmware/bootloader.bin?v=70c9a76f",
           "offset": 4096
         },
         {
-          "path": "firmware/partitions.bin",
+          "path": "firmware/partitions.bin?v=d6a2ee06",
           "offset": 32768
         },
         {
-          "path": "firmware/fh12_pwm.bin",
+          "path": "firmware/fh12_pwm.bin?v=0c9eeb8a",
           "offset": 65536
         }
       ]
