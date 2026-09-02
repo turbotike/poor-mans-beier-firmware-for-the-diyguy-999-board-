@@ -11,11 +11,11 @@
           "offset": 4096
         },
         {
-          "path": "firmware/partitions.bin?v=d6a2ee06",
+          "path": "firmware/partitions.bin?v=84cca47e",
           "offset": 32768
         },
         {
-          "path": "firmware/8v92_pwm.bin?v=933aaeb9",
+          "path": "firmware/8v92_pwm.bin?v=45dbc034",
           "offset": 65536
         }
       ]

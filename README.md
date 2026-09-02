@@ -50,10 +50,9 @@ a phone/tablet web UI for tuning, all running on a single ESP32.
   neutral raises the pitch of the idle loop and lets it settle back, which is
   the same sound going faster, and makes the blip proportional to the stick
   instead of on/off.
-- **Reassign what each channel does** (FH12 builds) — throttle, steering,
-  engine, horn, gear and lights each take a channel number instead of being
-  fixed. iBUS/SBUS only; PWM wires each role to its own pin. See
-  [CHANNELS.md](CHANNELS.md).
+- **Reassign what each channel does** — throttle, steering, engine, horn, gear
+  and lights each take a channel number instead of being fixed. iBUS/SBUS only;
+  PWM wires each role to its own pin. See [CHANNELS.md](CHANNELS.md).
 - **Loud and clean** — every sound pack is mastered for a consistent, punchy
   level, and the firmware runs a master soft-saturation stage so you can crank
   it to cut through a closed truck body without harsh clipping.

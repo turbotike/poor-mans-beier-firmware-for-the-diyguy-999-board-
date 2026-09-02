@@ -1,8 +1,8 @@
 {
-  "partitions_offset": "0x8000",
-  "bootloader": "bootloader.bin",
   "bootloader_offset": "0x1000",
+  "partitions_offset": "0x8000",
   "app_offset": "0x10000",
+  "bootloader": "bootloader.bin",
   "partitions": "partitions.bin",
   "variants": [
     {
@@ -10,63 +10,63 @@
       "pack": "c15",
       "proto": "pwm",
       "file": "c15_pwm.bin",
-      "size": 2827216
+      "size": 2827680
     },
     {
       "id": "c15_ibus",
       "pack": "c15",
       "proto": "ibus",
       "file": "c15_ibus.bin",
-      "size": 2828128
+      "size": 2828688
     },
     {
       "id": "c15_sbus",
       "pack": "c15",
       "proto": "sbus",
       "file": "c15_sbus.bin",
-      "size": 2828512
+      "size": 2829056
     },
     {
       "id": "8v92_pwm",
       "pack": "8v92",
       "proto": "pwm",
       "file": "8v92_pwm.bin",
-      "size": 2291648
+      "size": 2292112
     },
     {
       "id": "8v92_ibus",
       "pack": "8v92",
       "proto": "ibus",
       "file": "8v92_ibus.bin",
-      "size": 2292576
+      "size": 2293120
     },
     {
       "id": "8v92_sbus",
       "pack": "8v92",
       "proto": "sbus",
       "file": "8v92_sbus.bin",
-      "size": 2292960
+      "size": 2293488
     },
     {
       "id": "n14_pwm",
       "pack": "n14",
       "proto": "pwm",
       "file": "n14_pwm.bin",
-      "size": 2961312
+      "size": 2961840
     },
     {
       "id": "n14_ibus",
       "pack": "n14",
       "proto": "ibus",
       "file": "n14_ibus.bin",
-      "size": 2962320
+      "size": 2962816
     },
     {
       "id": "n14_sbus",
       "pack": "n14",
       "proto": "sbus",
       "file": "n14_sbus.bin",
-      "size": 2962672
+      "size": 2963216
     },
     {
       "id": "fh12_pwm",

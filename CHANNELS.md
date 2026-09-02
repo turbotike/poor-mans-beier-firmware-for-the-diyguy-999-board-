@@ -106,10 +106,10 @@ a reflash because they live in a separate area of flash from the firmware.
 
 ---
 
-## Reassigning channels (FH12 builds)
+## Reassigning channels
 
-The map above is the default. On **FH12** firmware you can also change which
-channel drives which role, from the truck's web UI or over `/set`:
+The map above is the default. You can also change which channel drives which
+role, from the truck's web UI or over `/set`:
 
 | Key                | Role     | Default |
 |--------------------|----------|---------|
@@ -127,5 +127,3 @@ throttle.
 **iBUS and SBUS only.** In PWM builds each role is wired to its own GPIO on the
 board, so there is nothing to reassign in software — you move the servo lead.
 
-The other engines still use the fixed map; they pick this up when they are next
-rebuilt.

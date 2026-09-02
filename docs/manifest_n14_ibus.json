@@ -11,11 +11,11 @@
           "offset": 4096
         },
         {
-          "path": "firmware/partitions.bin?v=d6a2ee06",
+          "path": "firmware/partitions.bin?v=84cca47e",
           "offset": 32768
         },
         {
-          "path": "firmware/n14_ibus.bin?v=9cf9e977",
+          "path": "firmware/n14_ibus.bin?v=268b928f",
           "offset": 65536
         }
       ]

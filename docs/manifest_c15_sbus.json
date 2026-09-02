@@ -11,11 +11,11 @@
           "offset": 4096
         },
         {
-          "path": "firmware/partitions.bin?v=d6a2ee06",
+          "path": "firmware/partitions.bin?v=84cca47e",
           "offset": 32768
         },
         {
-          "path": "firmware/c15_sbus.bin?v=0c75d937",
+          "path": "firmware/c15_sbus.bin?v=3faedc81",
           "offset": 65536
         }
       ]
