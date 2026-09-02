@@ -30,7 +30,6 @@ LABELS = {
     "fh12_pwm":  ("Volvo FH12", "PWM (standard RC PPM)"),
     "fh12_ibus": ("Volvo FH12", "iBUS (FlySky)"),
     "fh12_sbus": ("Volvo FH12", "SBUS (FrSky/Futaba)"),
-    "c15sim_ibus": ("C15 Simulated", "iBUS (FlySky) - recorded C15 + 10-spd transmission"),
 }
 
 variants = sorted([

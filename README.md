@@ -22,8 +22,7 @@ a phone/tablet web UI for tuning, all running on a single ESP32.
 ## Highlights
 
 - **Four engines included**: Caterpillar **C15**, Detroit **8V92**,
-  Cummins **N14**, and Volvo **FH12** — twelve ready-to-flash builds in total,
-  plus the C15 Simulated variant.
+  Cummins **N14**, and Volvo **FH12** — twelve ready-to-flash builds in total.
 - **FH12 does two things differently.** Its decel voice is the jake brake,
   looped for as long as you are off the throttle and pitched by engine rpm, so
   it steps back up at every downshift instead of sliding down one long glide.

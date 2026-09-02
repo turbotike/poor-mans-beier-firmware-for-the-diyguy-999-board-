@@ -210,7 +210,6 @@ fetch('manifests.json?v='+Date.now()).then(function(r){return r.json();}).then(f
     {title:'Detroit 8V92', sub:'two-stroke screamer',     value:'8v92'},
     {title:'Cummins N14',  sub:'14L big-cam diesel',       value:'n14'},
     {title:'Volvo FH12',   sub:'12L inline-6, jake decel',  value:'fh12'},
-    {title:'C15 Simulated', sub:'recorded C15 + 10-spd transmission (iBUS)', value:'c15sim'},
   ], function(v){ pickedPack=v; refreshButton(); });
   buildOpts('protos', [
     {title:'PWM',  sub:'standard RC PPM input',  value:'pwm'},
