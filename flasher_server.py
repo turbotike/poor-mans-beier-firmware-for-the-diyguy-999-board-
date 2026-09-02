@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Poor Man's Beier - one-click web flasher for the ESP32 truck sound board.
+RC LARGECARS - one-click web flasher for the ESP32 truck sound board.
 
 Run from this folder:    python flasher_server.py
 Or double-click:         Launch_Flasher.bat
@@ -156,7 +156,7 @@ JOB = FlashJob()
 INDEX_HTML = r"""<!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8">
-<title>Poor Man's Beier - Flasher</title>
+<title>RC LARGECARS - Flasher</title>
 <style>
   :root{--bg:#000000;--card:#0a0a0a;--bord:#1a1a1a;--text:#e0e0e0;--mute:#6a6a6a;
         --acc:#39ff14;--acc2:#ff3333;--ok:#39ff14;--amber:#ffaa00}
@@ -215,7 +215,7 @@ INDEX_HTML = r"""<!doctype html>
 </style>
 </head><body>
 <header>
-  <h1>Poor Man's Beier</h1>
+  <h1>RC LARGECARS</h1>
   <span class="sub">pick a sound + protocol, plug in the ESP32, hit Flash</span>
   <span style="flex:1"></span>
 </header>
@@ -425,7 +425,7 @@ def main():
         sys.exit(1)
     srv = ThreadingHTTPServer(('127.0.0.1', PORT), Handler)
     url = f'http://localhost:{PORT}'
-    print(f"Poor Man's Beier  ->  {url}")
+    print(f"RC LARGECARS  ->  {url}")
     threading.Timer(0.6, lambda: webbrowser.open(url)).start()
     try:
         srv.serve_forever()

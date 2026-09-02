@@ -1,4 +1,4 @@
-# How to use Poor Man's Beier — Step by Step
+# How to use RC LARGECARS — Step by Step
 
 Complete guide from "I just downloaded this" to "my truck sounds awesome".
 

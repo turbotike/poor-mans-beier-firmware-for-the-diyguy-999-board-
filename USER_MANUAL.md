@@ -1,6 +1,6 @@
 # RC LARGECARS — User Manual
 
-*Poor Man's Beier firmware for the DIYGuy999 RC_Engine_Sound_ESP32 board (v1.2)*
+*RC LARGECARS firmware for the DIYGuy999 RC_Engine_Sound_ESP32 board (v1.2)*
 
 Everything you need to drive, tune, and enjoy your truck. For first-time
 flashing/setup, see **[HOW_TO.md](HOW_TO.md)**; this manual is about *using* it.

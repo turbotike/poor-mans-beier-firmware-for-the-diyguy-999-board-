@@ -42,7 +42,7 @@ variants = sorted([
 index = []
 for v in variants:
     pack, sub = LABELS.get(v, (v, ""))
-    name = f"Poor Man's Beier - {pack} {sub}".strip()
+    name = f"RC LARGECARS - {pack} {sub}".strip()
     manifest = {
         "name": name,
         "version": "1.0",

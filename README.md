@@ -1,4 +1,4 @@
-# Poor Man's Beier — RC LARGECARS Firmware for the DIYGuy999 ESP32 Sound Board
+# RC LARGECARS — Firmware for the DIYGuy999 ESP32 Sound Board
 
 > 🤖 **Vibe coded.** This entire project — firmware, flasher, web tools, and
 > sound packs — was built by vibe coding with AI. Built for fun, tuned by ear.
